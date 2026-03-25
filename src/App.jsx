@@ -4,7 +4,7 @@ import Footer from './layout/Footer';
 
 function App() {
   return (
-    <div className="flex min-h-screen flex-col bg-white text-neutral-900">
+    <div className="w-full min-h-screen bg-white text-neutral-900">
       <Header />
       <PageContent />
       <Footer />

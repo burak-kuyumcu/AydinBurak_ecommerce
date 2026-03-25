@@ -4,15 +4,15 @@ function ProductCard({ image, title, department, oldPrice, price }) {
       <img
         src={image}
         alt={title}
-        className="h-[300px] w-full object-cover"
+        className="h-75 w-full object-cover md:h-90 lg:h-75"
       />
 
-      <div className="flex flex-col gap-[10px] py-[16px]">
+      <div className="flex flex-col gap-2.5 py-4">
         <h3 className="text-[16px] font-bold text-[#252B42]">{title}</h3>
 
         <p className="text-[14px] font-semibold text-[#737373]">{department}</p>
 
-        <div className="flex items-center justify-center gap-[5px]">
+        <div className="flex items-center justify-center gap-1">
           <span className="text-[14px] font-bold text-[#BDBDBD] line-through">
             ${oldPrice}
           </span>
@@ -21,11 +21,11 @@ function ProductCard({ image, title, department, oldPrice, price }) {
           </span>
         </div>
 
-        <div className="flex justify-center gap-[6px]">
-          <span className="h-[16px] w-[16px] rounded-full bg-[#23A6F0]" />
-          <span className="h-[16px] w-[16px] rounded-full bg-[#23856D]" />
-          <span className="h-[16px] w-[16px] rounded-full bg-[#E77C40]" />
-          <span className="h-[16px] w-[16px] rounded-full bg-[#252B42]" />
+        <div className="flex justify-center gap-1.5">
+          <span className="h-4 w-4 rounded-full bg-[#23A6F0]" />
+          <span className="h-4 w-4 rounded-full bg-[#23856D]" />
+          <span className="h-4 w-4 rounded-full bg-[#E77C40]" />
+          <span className="h-4 w-4 rounded-full bg-[#252B42]" />
         </div>
       </div>
     </div>

@@ -32,26 +32,26 @@ function HomeSlider() {
       >
         {slides.map((slide) => (
           <SwiperSlide key={slide.id}>
-            <div className="mx-auto flex min-h-[520px] max-w-[1440px] flex-col overflow-hidden md:min-h-[600px] md:flex-row">
-              <div className="flex w-full flex-col justify-center gap-[24px] px-[24px] py-[48px] text-center md:w-1/2 md:px-[60px] md:py-[60px] md:text-left lg:px-[100px]">
+            <div className="mx-auto flex min-h-130 max-w-360 flex-col overflow-hidden md:min-h-150 md:flex-row">
+              <div className="flex w-full flex-col justify-center gap-6 px-6 py-12 text-center md:w-1/2 md:px-15 md:py-15 md:text-left lg:px-25">
                 <span className="text-[16px] font-bold tracking-[0.1px] text-[#23A6F0]">
                   {slide.subtitle}
                 </span>
 
-                <h1 className="text-[40px] font-bold leading-[50px] tracking-[0.2px] text-[#252B42] md:text-[52px] md:leading-[62px] lg:text-[58px] lg:leading-[80px]">
+                <h1 className="text-[40px] font-bold leading-12.5 tracking-[0.2px] text-[#252B42] md:text-[52px] md:leading-15.5 lg:text-[58px] lg:leading-20">
                   {slide.title}
                 </h1>
 
-                <p className="max-w-[376px] text-[20px] leading-[30px] text-[#737373] md:max-w-[420px]">
+                <p className="max-w-94 text-[20px] leading-7.5 text-[#737373] md:max-w-105">
                   {slide.desc}
                 </p>
 
-                <button className="w-fit self-center rounded-[5px] bg-[#2DC071] px-[40px] py-[15px] text-[24px] font-bold text-white md:self-start">
+                <button className="w-fit self-center rounded-[5px] bg-[#2DC071] px-10 py-3.75 text-[24px] font-bold text-white md:self-start">
                   Shop Now
                 </button>
               </div>
 
-              <div className="h-[320px] w-full md:h-auto md:w-1/2">
+              <div className="h-80 w-full md:h-auto md:w-1/2">
                 <img
                   src={slide.image}
                   alt={slide.title}
