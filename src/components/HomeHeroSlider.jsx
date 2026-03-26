@@ -1,179 +1,74 @@
-import ProductCard from '../components/ProductCard';
-import HomeHeroSlider from '../components/HomeHeroSlider';
-import EditorsPick from '../components/EditorsPick';
-import FeaturedPosts from '../components/FeaturedPosts';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination } from 'swiper/modules';
 
-function HomePage() {
-  const products = [
+function HomeHeroSlider() {
+  const slides = [
     {
       id: 1,
-      title: 'Graphic Design',
-      department: 'English Department',
-      oldPrice: '16.48',
-      price: '6.48',
+      subtitle: 'SUMMER 2020',
+      title: 'NEW COLLECTION',
+      description:
+        'We know how large objects will act, but things on a small screen.',
       image:
-        'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80',
+        'https://images.unsplash.com/photo-1506152983158-b4a74a01c721?auto=format&fit=crop&w=900&q=80',
+      bg: 'bg-[#23A6F0]',
     },
     {
       id: 2,
-      title: 'Graphic Design',
-      department: 'English Department',
-      oldPrice: '16.48',
-      price: '6.48',
+      subtitle: 'SUMMER 2020',
+      title: 'FRESH STYLE',
+      description:
+        'A modern collection designed for mobile-first shopping experiences.',
       image:
-        'https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=800&q=80',
-    },
-    {
-      id: 3,
-      title: 'Graphic Design',
-      department: 'English Department',
-      oldPrice: '16.48',
-      price: '6.48',
-      image:
-        'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=800&q=80',
-    },
-    {
-      id: 4,
-      title: 'Graphic Design',
-      department: 'English Department',
-      oldPrice: '16.48',
-      price: '6.48',
-      image:
-        'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=800&q=80',
-    },
-    {
-      id: 5,
-      title: 'Graphic Design',
-      department: 'English Department',
-      oldPrice: '16.48',
-      price: '6.48',
-      image:
-        'https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=800&q=80',
-    },
-    {
-      id: 6,
-      title: 'Graphic Design',
-      department: 'English Department',
-      oldPrice: '16.48',
-      price: '6.48',
-      image:
-        'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=800&q=80',
-    },
-    {
-      id: 7,
-      title: 'Graphic Design',
-      department: 'English Department',
-      oldPrice: '16.48',
-      price: '6.48',
-      image:
-        'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=800&q=80',
-    },
-    {
-      id: 8,
-      title: 'Graphic Design',
-      department: 'English Department',
-      oldPrice: '16.48',
-      price: '6.48',
-      image:
-        'https://images.unsplash.com/photo-1495385794356-15371f348c31?auto=format&fit=crop&w=800&q=80',
+        'https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=900&q=80',
+      bg: 'bg-[#2DC071]',
     },
   ];
 
   return (
-    <div className="flex w-full flex-col bg-white">
-      <HomeHeroSlider />
-      <EditorsPick />
+    <section className="w-full">
+      <Swiper
+        modules={[Navigation, Pagination]}
+        navigation
+        pagination={{ clickable: true }}
+        loop
+      >
+        {slides.map((slide) => (
+          <SwiperSlide key={slide.id}>
+            <div className={`w-full ${slide.bg}`}>
+              <div className="mx-auto flex w-full max-w-330 flex-col md:flex-row">
+                <div className="flex w-full flex-col justify-center gap-6 px-6 py-10 text-white md:w-1/2 md:px-8 lg:px-10">
+                  <span className="text-[16px] font-bold tracking-[0.1px]">
+                    {slide.subtitle}
+                  </span>
 
-      <section className="w-full bg-white">
-        <div className="mx-auto flex w-full max-w-330 flex-col gap-10 px-4 py-12 md:px-6 xl:px-8">
-          <div className="flex flex-col items-center gap-2 text-center">
-            <span className="text-[20px] text-[#737373]">Featured Products</span>
-            <h2 className="text-[24px] font-bold text-[#252B42]">
-              BESTSELLER PRODUCTS
-            </h2>
-            <p className="text-[14px] text-[#737373]">
-              Problems trying to resolve the conflict between
-            </p>
-          </div>
+                  <h1 className="text-[40px] font-bold leading-[50px] tracking-[0.2px]">
+                    {slide.title}
+                  </h1>
 
-          <div className="flex flex-col gap-6 md:flex-row md:flex-wrap md:gap-7.5">
-            {products.map((product) => (
-              <div
-                key={product.id}
-                className="w-full md:w-[calc(50%-15px)] lg:w-[calc(25%-24px)]"
-              >
-                <ProductCard {...product} />
+                  <p className="max-w-[280px] text-[14px] leading-6 text-white/90">
+                    {slide.description}
+                  </p>
+
+                  <button className="w-fit bg-[#2DC071] px-10 py-3 text-[14px] font-bold text-white">
+                    SHOP NOW
+                  </button>
+                </div>
+
+                <div className="flex w-full items-end justify-center md:w-1/2">
+                  <img
+                    src={slide.image}
+                    alt={slide.title}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="w-full bg-[#23856D]">
-        <div className="mx-auto flex w-full max-w-330 flex-col items-center gap-8 px-4 py-12 text-white md:flex-row md:px-6 xl:px-8">
-          <div className="flex w-full flex-col gap-4 md:w-1/2">
-            <span className="text-[16px] font-bold tracking-[0.1px]">SUMMER 2020</span>
-            <h2 className="text-[40px] font-bold leading-[50px]">
-              Vita Classic Product
-            </h2>
-            <p className="max-w-[300px] text-[14px] leading-6 text-white/90">
-              We know how large objects will act, We know how are objects will act, We know
-            </p>
-
-            <div className="flex items-center gap-4">
-              <span className="text-[24px] font-bold">$16.48</span>
-              <button className="bg-[#2DC071] px-8 py-3 text-[14px] font-bold text-white">
-                ADD TO CART
-              </button>
             </div>
-          </div>
-
-          <div className="flex w-full justify-center md:w-1/2">
-            <img
-              src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80"
-              alt="Vita product"
-              className="h-[300px] w-full object-cover md:h-[400px]"
-            />
-          </div>
-        </div>
-      </section>
-
-      <section className="w-full bg-white">
-        <div className="mx-auto flex w-full max-w-330 flex-col gap-8 px-4 py-12 md:flex-row md:items-center md:px-6 xl:px-8">
-          <div className="w-full md:w-1/2">
-            <img
-              src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=900&q=80"
-              alt="Promo"
-              className="h-[300px] w-full object-cover md:h-[400px]"
-            />
-          </div>
-
-          <div className="flex w-full flex-col gap-4 md:w-1/2">
-            <span className="text-[16px] font-bold text-[#BDBDBD]">
-              SUMMER 2020
-            </span>
-            <h2 className="max-w-[320px] text-[40px] font-bold leading-[50px] text-[#252B42]">
-              Part of the Neural Universe
-            </h2>
-            <p className="max-w-[320px] text-[14px] leading-6 text-[#737373]">
-              We know how large objects will act, but things on a small scale.
-            </p>
-
-            <div className="flex gap-3">
-              <button className="bg-[#2DC071] px-8 py-3 text-[14px] font-bold text-white">
-                BUY NOW
-              </button>
-              <button className="border border-[#2DC071] px-8 py-3 text-[14px] font-bold text-[#2DC071]">
-                READ MORE
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <FeaturedPosts />
-    </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </section>
   );
 }
 
-export default HomePage;
+export default HomeHeroSlider;
