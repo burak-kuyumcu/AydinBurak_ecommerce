@@ -131,7 +131,7 @@ function Header() {
               </Link>
 
               <Link
-                to="/"
+                to="/shop"
                 className="flex items-center gap-1.5 text-[14px] font-semibold leading-6 tracking-[0.2px] text-[#737373]"
               >
                 Shop
