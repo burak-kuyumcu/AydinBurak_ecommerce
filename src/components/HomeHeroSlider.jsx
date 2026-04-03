@@ -36,13 +36,13 @@ function HomeHeroSlider() {
         {slides.map((slide) => (
           <SwiperSlide key={slide.id}>
             <div className={`w-full ${slide.bg}`}>
-              <div className="mx-auto flex w-full max-w-330 flex-col md:flex-row">
-                <div className="flex w-full flex-col justify-center gap-6 px-6 py-10 text-white md:w-1/2 md:px-8 lg:px-10">
+              <div className="mx-auto flex w-full max-w-330 flex-col md:min-h-[500px] md:flex-row">
+                <div className="flex w-full flex-col justify-center gap-6 px-6 py-12 text-white md:w-1/2 md:px-8 lg:px-10">
                   <span className="text-[16px] font-bold tracking-[0.1px]">
                     {slide.subtitle}
                   </span>
 
-                  <h1 className="text-[40px] font-bold leading-[50px] tracking-[0.2px]">
+                  <h1 className="text-[40px] font-bold leading-[50px] tracking-[0.2px] md:text-[58px] md:leading-[80px]">
                     {slide.title}
                   </h1>
 
@@ -55,11 +55,11 @@ function HomeHeroSlider() {
                   </button>
                 </div>
 
-                <div className="flex w-full items-end justify-center md:w-1/2">
+                <div className="w-full md:w-1/2">
                   <img
                     src={slide.image}
                     alt={slide.title}
-                    className="h-full w-full object-cover"
+                    className="h-[320px] w-full object-cover md:h-full"
                   />
                 </div>
               </div>
