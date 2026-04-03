@@ -7,12 +7,14 @@ import {
   Search,
   ShoppingCart,
   Heart,
-  Globe,
-  MessageCircle,
-  Play,
-  Share2,
   Menu,
 } from 'lucide-react';
+import {
+  FaInstagram,
+  FaYoutube,
+  FaFacebookF,
+  FaTwitter,
+} from 'react-icons/fa';
 
 function Header() {
   return (
@@ -45,10 +47,10 @@ function Header() {
             </span>
 
             <div className="flex items-center gap-2.5">
-              <Globe size={16} />
-              <MessageCircle size={16} />
-              <Play size={16} />
-              <Share2 size={16} />
+              <FaInstagram size={16} />
+              <FaYoutube size={16} />
+              <FaFacebookF size={16} />
+              <FaTwitter size={16} />
             </div>
           </div>
         </div>
@@ -73,7 +75,7 @@ function Header() {
             <Link to="/" className="text-[30px] leading-11.25 text-[#252B42]">
               Home
             </Link>
-            <Link to="/" className="text-[30px] leading-11.25 text-[#737373]">
+            <Link to="/shop" className="text-[30px] leading-11.25 text-[#737373]">
               Shop
             </Link>
             <Link to="/" className="text-[30px] leading-11.25 text-[#737373]">
@@ -82,7 +84,7 @@ function Header() {
             <Link to="/" className="text-[30px] leading-11.25 text-[#737373]">
               Blog
             </Link>
-            <Link to="/" className="text-[30px] leading-11.25 text-[#737373]">
+            <Link to="/contact" className="text-[30px] leading-11.25 text-[#737373]">
               Contact
             </Link>
             <Link to="/" className="text-[30px] leading-11.25 text-[#737373]">
@@ -153,7 +155,7 @@ function Header() {
               </Link>
 
               <Link
-                to="/"
+                to="/contact"
                 className="text-[14px] font-semibold leading-6 tracking-[0.2px] text-[#737373]"
               >
                 Contact
