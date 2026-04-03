@@ -1,6 +1,8 @@
-function ProductCard({ image, title, department, oldPrice, price }) {
+import { Link } from 'react-router-dom';
+
+function ProductCard({ id, image, title, department, oldPrice, price }) {
   return (
-    <div className="flex flex-col items-center text-center">
+    <Link to={`/product/${id}`} className="flex flex-col items-center text-center">
       <img
         src={image}
         alt={title}
@@ -28,7 +30,7 @@ function ProductCard({ image, title, department, oldPrice, price }) {
           <span className="h-4 w-4 rounded-full bg-[#252B42]" />
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
