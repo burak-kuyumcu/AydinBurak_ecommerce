@@ -93,7 +93,7 @@ function Header() {
           </nav>
 
           <Link
-            to="/"
+            to="/signup"
             className="flex items-center gap-2 text-[24px] leading-9 text-[#23A6F0]"
           >
             <User size={20} />
@@ -172,7 +172,7 @@ function Header() {
 
           <div className="hidden items-center gap-7.5 lg:flex">
             <Link
-              to="/"
+              to="/signup"
               className="flex items-center gap-1.5 text-[14px] font-semibold leading-6 tracking-[0.2px] text-[#23A6F0]"
             >
               <User size={16} />
