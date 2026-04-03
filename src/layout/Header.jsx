@@ -78,7 +78,7 @@ function Header() {
             <Link to="/shop" className="text-[30px] leading-11.25 text-[#737373]">
               Shop
             </Link>
-            <Link to="/team" className="text-[30px] leading-11.25 text-[#737373]">
+            <Link to="/about" className="text-[30px] leading-11.25 text-[#737373]">
               About
             </Link>
             <Link to="/" className="text-[30px] leading-11.25 text-[#737373]">
@@ -141,7 +141,7 @@ function Header() {
               </Link>
 
               <Link
-                to="/team"
+                to="/about"
                 className="text-[14px] font-semibold leading-6 tracking-[0.2px] text-[#737373]"
               >
                 About
