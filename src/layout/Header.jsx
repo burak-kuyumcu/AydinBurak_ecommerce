@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Phone,
@@ -8,6 +9,7 @@ import {
   ShoppingCart,
   Heart,
   Menu,
+  X,
 } from 'lucide-react';
 import {
   FaInstagram,
@@ -17,6 +19,16 @@ import {
 } from 'react-icons/fa';
 
 function Header() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen((prev) => !prev);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
+
   return (
     <header className="w-full">
       <div className="hidden w-full bg-[#23856D] text-white lg:block">
@@ -60,58 +72,105 @@ function Header() {
         <div className="flex items-center justify-between px-6 py-6">
           <Link
             to="/"
+            onClick={closeMobileMenu}
             className="text-[24px] font-bold leading-8 tracking-[0.1px] text-[#252B42]"
           >
             Bandage
           </Link>
 
-          <button className="text-[#737373]">
-            <Menu size={20} />
+          <button
+            type="button"
+            onClick={toggleMobileMenu}
+            className="text-[#737373]"
+          >
+            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
 
-        <div className="flex flex-col items-center gap-6 px-6 pb-6 pt-2">
-          <nav className="flex flex-col items-center gap-6">
-            <Link to="/" className="text-[30px] leading-11.25 text-[#252B42]">
-              Home
-            </Link>
-            <Link to="/shop" className="text-[30px] leading-11.25 text-[#737373]">
-              Shop
-            </Link>
-            <Link to="/about" className="text-[30px] leading-11.25 text-[#737373]">
-              About
-            </Link>
-            <Link to="/" className="text-[30px] leading-11.25 text-[#737373]">
-              Blog
-            </Link>
-            <Link to="/contact" className="text-[30px] leading-11.25 text-[#737373]">
-              Contact
-            </Link>
-            <Link to="/" className="text-[30px] leading-11.25 text-[#737373]">
-              Pages
-            </Link>
-          </nav>
+        {isMobileMenuOpen && (
+          <div className="flex flex-col items-center gap-6 px-6 pb-6 pt-2">
+            <nav className="flex flex-col items-center gap-6">
+              <Link
+                to="/"
+                onClick={closeMobileMenu}
+                className="text-[30px] leading-11.25 text-[#252B42]"
+              >
+                Home
+              </Link>
 
-          <Link
-            to="/signup"
-            className="flex items-center gap-2 text-[24px] leading-9 text-[#23A6F0]"
-          >
-            <User size={20} />
-            Login / Register
-          </Link>
+              <Link
+                to="/shop"
+                onClick={closeMobileMenu}
+                className="text-[30px] leading-11.25 text-[#737373]"
+              >
+                Shop
+              </Link>
 
-          <div className="flex flex-col items-center gap-4 text-[#23A6F0]">
-            <button>
-              <Search size={22} />
-            </button>
-            <button>
-              <ShoppingCart size={22} />
-            </button>
-            <button>
-              <Heart size={22} />
-            </button>
+              <Link
+                to="/about"
+                onClick={closeMobileMenu}
+                className="text-[30px] leading-11.25 text-[#737373]"
+              >
+                About
+              </Link>
+
+              <Link
+                to="/"
+                onClick={closeMobileMenu}
+                className="text-[30px] leading-11.25 text-[#737373]"
+              >
+                Blog
+              </Link>
+
+              <Link
+                to="/contact"
+                onClick={closeMobileMenu}
+                className="text-[30px] leading-11.25 text-[#737373]"
+              >
+                Contact
+              </Link>
+
+              <Link
+                to="/"
+                onClick={closeMobileMenu}
+                className="text-[30px] leading-11.25 text-[#737373]"
+              >
+                Pages
+              </Link>
+
+              <Link
+                to="/pricing"
+                onClick={closeMobileMenu}
+                className="text-[30px] leading-11.25 text-[#737373]"
+              >
+                Pricing
+              </Link>
+            </nav>
+
+            <Link
+              to="/signup"
+              onClick={closeMobileMenu}
+              className="flex items-center gap-2 text-[24px] leading-9 text-[#23A6F0]"
+            >
+              <User size={20} />
+              Login / Register
+            </Link>
+
+            <div className="flex flex-col items-center gap-4 text-[#23A6F0]">
+              <button type="button">
+                <Search size={22} />
+              </button>
+
+              <button type="button">
+                <ShoppingCart size={22} />
+              </button>
+
+              <button type="button">
+                <Heart size={22} />
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       <div className="hidden w-full bg-white lg:block">
@@ -167,6 +226,13 @@ function Header() {
               >
                 Pages
               </Link>
+
+              <Link
+                to="/pricing"
+                className="text-[14px] font-semibold leading-6 tracking-[0.2px] text-[#737373]"
+              >
+                Pricing
+              </Link>
             </nav>
           </div>
 
@@ -179,16 +245,22 @@ function Header() {
               Login / Register
             </Link>
 
-            <button className="text-[#23A6F0]">
+            <button type="button" className="text-[#23A6F0]">
               <Search size={18} />
             </button>
 
-            <button className="flex items-center gap-1 text-[#23A6F0]">
+            <button
+              type="button"
+              className="flex items-center gap-1 text-[#23A6F0]"
+            >
               <ShoppingCart size={18} />
               <span className="text-[12px] leading-4">1</span>
             </button>
 
-            <button className="flex items-center gap-1 text-[#23A6F0]">
+            <button
+              type="button"
+              className="flex items-center gap-1 text-[#23A6F0]"
+            >
               <Heart size={18} />
               <span className="text-[12px] leading-4">1</span>
             </button>
