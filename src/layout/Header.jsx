@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import md5 from 'md5';
 import {
   Phone,
   Mail,
@@ -20,6 +22,7 @@ import {
 
 function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const user = useSelector((state) => state.client.user);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen((prev) => !prev);
@@ -28,6 +31,12 @@ function Header() {
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
   };
+
+  const gravatarUrl = user?.email
+    ? `https://www.gravatar.com/avatar/${md5(
+        user.email.trim().toLowerCase()
+      )}?d=identicon&s=40`
+    : '';
 
   return (
     <header className="w-full">
@@ -147,14 +156,27 @@ function Header() {
               </Link>
             </nav>
 
-            <Link
-              to="/signup"
-              onClick={closeMobileMenu}
-              className="flex items-center gap-2 text-[24px] leading-9 text-[#23A6F0]"
-            >
-              <User size={20} />
-              Login / Register
-            </Link>
+            {user?.email ? (
+              <div className="flex items-center gap-3 text-[#23A6F0]">
+                <img
+                  src={gravatarUrl}
+                  alt={user.name || user.email}
+                  className="h-10 w-10 rounded-full"
+                />
+                <span className="text-[18px] font-semibold">
+                  {user.name || user.email}
+                </span>
+              </div>
+            ) : (
+              <Link
+                to="/login"
+                onClick={closeMobileMenu}
+                className="flex items-center gap-2 text-[24px] leading-9 text-[#23A6F0]"
+              >
+                <User size={20} />
+                Login / Register
+              </Link>
+            )}
 
             <div className="flex flex-col items-center gap-4 text-[#23A6F0]">
               <button type="button">
@@ -237,13 +259,26 @@ function Header() {
           </div>
 
           <div className="hidden items-center gap-7.5 lg:flex">
-            <Link
-              to="/signup"
-              className="flex items-center gap-1.5 text-[14px] font-semibold leading-6 tracking-[0.2px] text-[#23A6F0]"
-            >
-              <User size={16} />
-              Login / Register
-            </Link>
+            {user?.email ? (
+              <div className="flex items-center gap-2 text-[#23A6F0]">
+                <img
+                  src={gravatarUrl}
+                  alt={user.name || user.email}
+                  className="h-8 w-8 rounded-full"
+                />
+                <span className="text-[14px] font-semibold">
+                  {user.name || user.email}
+                </span>
+              </div>
+            ) : (
+              <Link
+                to="/login"
+                className="flex items-center gap-1.5 text-[14px] font-semibold leading-6 tracking-[0.2px] text-[#23A6F0]"
+              >
+                <User size={16} />
+                Login / Register
+              </Link>
+            )}
 
             <button type="button" className="text-[#23A6F0]">
               <Search size={18} />

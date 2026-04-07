@@ -41,3 +41,31 @@ export const fetchRolesIfNeeded = () => {
     }
   };
 };
+
+export const loginUser = (formData, history, previousPath) => {
+  return async (dispatch) => {
+    try {
+      const response = await api.post('/login', {
+        email: formData.email,
+        password: formData.password,
+      });
+
+      const userData = response.data;
+
+      dispatch(setUser(userData));
+
+      if (formData.rememberMe && userData.token) {
+        localStorage.setItem('token', userData.token);
+      } else {
+        localStorage.removeItem('token');
+      }
+
+      history.push(previousPath || '/');
+      return { success: true };
+    } catch (error) {
+      const message =
+        error?.response?.data?.message || 'Login failed. Please try again.';
+      return { success: false, message };
+    }
+  };
+};
