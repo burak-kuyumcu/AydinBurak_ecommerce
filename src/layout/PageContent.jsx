@@ -8,6 +8,7 @@ import AboutPage from '../pages/AboutPage';
 import SignupPage from '../pages/SignupPage';
 import PricingPage from '../pages/PricingPage';
 import LoginPage from '../pages/LoginPage';
+import CartPage from '../pages/CartPage';
 
 function PageContent() {
   return (
@@ -15,8 +16,15 @@ function PageContent() {
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route exact path="/shop" component={ShopPage} />
-        <Route path="/shop/:gender/:categoryName/:categoryId/:productNameSlug/:productId" component={ProductDetailPage} />
-        <Route path="/shop/:gender/:categoryName/:categoryId" component={ShopPage} />
+        <Route
+          path="/shop/:gender/:categoryName/:categoryId/:productNameSlug/:productId"
+          component={ProductDetailPage}
+        />
+        <Route
+          path="/shop/:gender/:categoryName/:categoryId"
+          component={ShopPage}
+        />
+        <Route path="/cart" component={CartPage} />
         <Route path="/contact" component={ContactPage} />
         <Route path="/team" component={TeamPage} />
         <Route path="/about" component={AboutPage} />

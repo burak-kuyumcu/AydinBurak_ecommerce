@@ -48,3 +48,59 @@ export const addToCart = (product) => {
     dispatch(setCart(updatedCart));
   };
 };
+
+export const increaseCartItemCount = (productId) => {
+  return (dispatch, getState) => {
+    const { shoppingCart } = getState();
+
+    const updatedCart = shoppingCart.cart.map((item) =>
+      String(item.product.id) === String(productId)
+        ? { ...item, count: item.count + 1 }
+        : item
+    );
+
+    dispatch(setCart(updatedCart));
+  };
+};
+
+export const decreaseCartItemCount = (productId) => {
+  return (dispatch, getState) => {
+    const { shoppingCart } = getState();
+
+    const updatedCart = shoppingCart.cart
+      .map((item) =>
+        String(item.product.id) === String(productId)
+          ? { ...item, count: item.count - 1 }
+          : item
+      )
+      .filter((item) => item.count > 0);
+
+    dispatch(setCart(updatedCart));
+  };
+};
+
+export const removeFromCart = (productId) => {
+  return (dispatch, getState) => {
+    const { shoppingCart } = getState();
+
+    const updatedCart = shoppingCart.cart.filter(
+      (item) => String(item.product.id) !== String(productId)
+    );
+
+    dispatch(setCart(updatedCart));
+  };
+};
+
+export const toggleCartItemChecked = (productId) => {
+  return (dispatch, getState) => {
+    const { shoppingCart } = getState();
+
+    const updatedCart = shoppingCart.cart.map((item) =>
+      String(item.product.id) === String(productId)
+        ? { ...item, checked: !item.checked }
+        : item
+    );
+
+    dispatch(setCart(updatedCart));
+  };
+};

@@ -388,59 +388,79 @@ function Header() {
               <Search size={18} />
             </button>
 
-            <div className="group relative">
-              <button
-                type="button"
-                className="flex items-center gap-1 text-[#23A6F0]"
-              >
-                <ShoppingCart size={18} />
-                <span className="text-[12px] leading-4">{cartItemCount}</span>
-              </button>
+          <div className="group relative">
+  <button
+    type="button"
+    className="flex items-center gap-1 text-[#23A6F0]"
+  >
+    <ShoppingCart size={18} />
+    <span className="text-[12px] leading-4">{cartItemCount}</span>
+  </button>
 
-              <div className="invisible absolute right-0 top-full z-50 mt-2 w-[320px] rounded-[8px] bg-white p-4 opacity-0 shadow-lg transition-all group-hover:visible group-hover:opacity-100">
-                <h3 className="mb-3 text-[16px] font-bold text-[#252B42]">
-                  Cart
-                </h3>
+  <div className="invisible absolute right-0 top-full z-50 mt-3 w-[360px] rounded-[10px] border border-[#E6E6E6] bg-white p-4 opacity-0 shadow-[0_10px_30px_rgba(0,0,0,0.08)] transition-all group-hover:visible group-hover:opacity-100">
+    <h3 className="mb-4 text-[24px] font-bold leading-8 text-[#252B42]">
+      Sepetim ({cartItemCount} Ürün)
+    </h3>
 
-                {cart.length === 0 ? (
-                  <p className="text-[14px] text-[#737373]">
-                    Your cart is empty.
-                  </p>
-                ) : (
-                  <div className="flex max-h-[300px] flex-col gap-3 overflow-y-auto">
-                    {cart.map((item) => (
-                      <div
-                        key={item.product.id}
-                        className="flex items-center gap-3 border-b border-[#E6E6E6] pb-3"
-                      >
-                        <img
-                          src={
-                            item.product.images?.[0]?.url ||
-                            item.product.images?.[0] ||
-                            item.product.image ||
-                            'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=800&q=80'
-                          }
-                          alt={item.product.name || item.product.title}
-                          className="h-16 w-16 rounded object-cover"
-                        />
+    {cart.length === 0 ? (
+      <p className="text-[14px] text-[#737373]">Your cart is empty.</p>
+    ) : (
+      <>
+        <div className="flex max-h-[320px] flex-col overflow-y-auto">
+          {cart.map((item, index) => (
+            <div
+              key={item.product.id}
+              className={`flex gap-3 py-4 ${
+                index !== cart.length - 1 ? 'border-b border-[#E6E6E6]' : ''
+              }`}
+            >
+              <img
+                src={
+                  item.product.images?.[0]?.url ||
+                  item.product.images?.[0] ||
+                  item.product.image ||
+                  'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=800&q=80'
+                }
+                alt={item.product.name || item.product.title}
+                className="h-20 w-20 rounded-[6px] border border-[#F3F3F3] object-cover"
+              />
 
-                        <div className="flex flex-1 flex-col gap-1">
-                          <span className="text-[14px] font-bold text-[#252B42]">
-                            {item.product.name || item.product.title}
-                          </span>
-                          <span className="text-[13px] text-[#737373]">
-                            Count: {item.count}
-                          </span>
-                          <span className="text-[13px] font-semibold text-[#23856D]">
-                            ${item.product.price}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
+              <div className="flex flex-1 flex-col gap-1">
+                <span className="line-clamp-2 text-[15px] font-bold leading-5 text-[#252B42]">
+                  {item.product.name || item.product.title}
+                </span>
+
+                <span className="text-[13px] text-[#737373]">
+                  Adet: {item.count}
+                </span>
+
+                <span className="text-[16px] font-bold text-[#23856D]">
+                  ${(Number(item.product.price || 0) * item.count).toFixed(2)}
+                </span>
               </div>
             </div>
+          ))}
+        </div>
+
+        <div className="mt-4 flex items-center gap-3">
+          <Link
+            to="/cart"
+            className="flex-1 rounded-[8px] border border-[#E6E6E6] bg-white px-4 py-3 text-center text-[15px] font-semibold text-[#252B42] transition hover:bg-[#F8F8F8]"
+          >
+            Sepete Git
+          </Link>
+
+          <button
+            type="button"
+            className="flex-1 rounded-[8px] bg-[#23A6F0] px-4 py-3 text-[15px] font-semibold text-white transition hover:opacity-90"
+          >
+            Siparişi Tamamla
+          </button>
+        </div>
+      </>
+    )}
+  </div>
+</div>
 
             <button
               type="button"
