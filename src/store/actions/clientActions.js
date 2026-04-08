@@ -4,6 +4,7 @@ export const SET_USER = 'SET_USER';
 export const SET_ROLES = 'SET_ROLES';
 export const SET_THEME = 'SET_THEME';
 export const SET_LANGUAGE = 'SET_LANGUAGE';
+export const SET_ADDRESS_LIST = 'SET_ADDRESS_LIST';
 
 export const setUser = (user) => ({
   type: SET_USER,
@@ -28,6 +29,11 @@ export const setTheme = (theme) => ({
 export const setLanguage = (language) => ({
   type: SET_LANGUAGE,
   payload: language,
+});
+
+export const setAddressList = (addressList) => ({
+  type: SET_ADDRESS_LIST,
+  payload: addressList,
 });
 
 export const fetchRolesIfNeeded = () => {
@@ -117,5 +123,57 @@ export const logoutUser = () => {
     localStorage.removeItem('token');
     setApiToken(null);
     dispatch(clearUser());
+  };
+};
+
+export const fetchAddresses = () => {
+  return async (dispatch) => {
+    try {
+      const response = await api.get('/user/address');
+      dispatch(setAddressList(response.data));
+      return { success: true };
+    } catch (error) {
+      console.error('Addresses could not be fetched:', error);
+      return { success: false };
+    }
+  };
+};
+
+export const createAddress = (addressData) => {
+  return async (dispatch) => {
+    try {
+      await api.post('/user/address', addressData);
+      await dispatch(fetchAddresses());
+      return { success: true };
+    } catch (error) {
+      console.error('Address could not be created:', error);
+      return { success: false };
+    }
+  };
+};
+
+export const updateAddress = (addressData) => {
+  return async (dispatch) => {
+    try {
+      await api.put('/user/address', addressData);
+      await dispatch(fetchAddresses());
+      return { success: true };
+    } catch (error) {
+      console.error('Address could not be updated:', error);
+      return { success: false };
+    }
+  };
+};
+
+export const deleteAddress = (addressId) => {
+  return async (dispatch) => {
+    try {
+      await api.delete(`/user/address/${addressId}`);
+      await dispatch(fetchAddresses());
+      return { success: true };
+    } catch (error) {
+      console.error('Address could not be deleted:', error);
+      return { success: false };
+    }
   };
 };

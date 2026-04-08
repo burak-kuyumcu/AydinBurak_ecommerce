@@ -9,6 +9,8 @@ import SignupPage from '../pages/SignupPage';
 import PricingPage from '../pages/PricingPage';
 import LoginPage from '../pages/LoginPage';
 import CartPage from '../pages/CartPage';
+import AddressPage from '../pages/AddressPage';
+import ProtectedRoute from '../components/ProtectedRoute';
 
 function PageContent() {
   return (
@@ -25,6 +27,7 @@ function PageContent() {
           component={ShopPage}
         />
         <Route path="/cart" component={CartPage} />
+        <ProtectedRoute path="/checkout/address" component={AddressPage} />
         <Route path="/contact" component={ContactPage} />
         <Route path="/team" component={TeamPage} />
         <Route path="/about" component={AboutPage} />
