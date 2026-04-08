@@ -1,6 +1,18 @@
+import { useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import ProductCard from '../components/ProductCard';
+import { fetchCategoriesIfNeeded } from '../store/actions/productActions';
 
 function ShopPage() {
+  const dispatch = useDispatch();
+  const categories = useSelector((state) => state.product.categories);
+  const { gender, categoryName, categoryId } = useParams();
+
+  useEffect(() => {
+    dispatch(fetchCategoriesIfNeeded());
+  }, [dispatch]);
+
   const products = [
     {
       id: 1,
@@ -112,33 +124,42 @@ function ShopPage() {
     },
   ];
 
-  const shopCategories = [
-    {
-      id: 1,
-      image:
-        'https://images.unsplash.com/photo-1520975916090-3105956dac38?auto=format&fit=crop&w=800&q=80',
-    },
-    {
-      id: 2,
-      image:
-        'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=800&q=80',
-    },
-    {
-      id: 3,
-      image:
-        'https://images.unsplash.com/photo-1521335629791-ce4aec67dd53?auto=format&fit=crop&w=800&q=80',
-    },
-    {
-      id: 4,
-      image:
-        'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=800&q=80',
-    },
-    {
-      id: 5,
-      image:
-        'https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?auto=format&fit=crop&w=800&q=80',
-    },
-  ];
+  const formatCategoryPath = (category) => {
+    const genderValue = String(category.gender || '').toLowerCase();
+    const genderText =
+      genderValue === 'k' || genderValue === 'kadın' || genderValue === 'kadin'
+        ? 'kadin'
+        : 'erkek';
+
+    const rawName = category.title || category.name || '';
+
+    const normalizedCategoryName = rawName
+      .toLowerCase()
+      .replaceAll(' ', '-')
+      .replaceAll('ı', 'i')
+      .replaceAll('ş', 's')
+      .replaceAll('ç', 'c')
+      .replaceAll('ö', 'o')
+      .replaceAll('ü', 'u')
+      .replaceAll('ğ', 'g');
+
+    return `/shop/${genderText}/${normalizedCategoryName}/${category.id}`;
+  };
+
+  const currentCategory = categories.find(
+    (item) => String(item.id) === String(categoryId)
+  );
+
+  const pageTitle = currentCategory
+    ? currentCategory.title || currentCategory.name
+    : 'Shop';
+
+  const breadcrumbGender =
+    gender === 'kadin' ? 'Kadın' : gender === 'erkek' ? 'Erkek' : '';
+
+  const topCategories = [...categories]
+    .sort((a, b) => Number(b.rating || 0) - Number(a.rating || 0))
+    .slice(0, 5);
 
   return (
     <div className="flex w-full flex-col bg-[#FAFAFA]">
@@ -146,37 +167,58 @@ function ShopPage() {
         <div className="mx-auto flex w-full max-w-330 flex-col gap-10 px-4 py-8 md:px-6 md:py-12 xl:px-8">
           <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
             <h2 className="text-center text-[24px] font-bold leading-8 tracking-[0.1px] text-[#252B42] md:text-left">
-              Shop
+              {pageTitle}
             </h2>
 
             <div className="flex items-center justify-center gap-2 text-[14px] font-semibold leading-6 tracking-[0.2px] text-[#737373] md:justify-end">
-              <span className="text-[#252B42]">Home</span>
+              <Link to="/" className="text-[#252B42]">
+                Home
+              </Link>
               <span>{'>'}</span>
-              <span>Shop</span>
+              <Link to="/shop" className="text-[#252B42]">
+                Shop
+              </Link>
+              {breadcrumbGender && (
+                <>
+                  <span>{'>'}</span>
+                  <span>{breadcrumbGender}</span>
+                </>
+              )}
+              {categoryName && (
+                <>
+                  <span>{'>'}</span>
+                  <span>{categoryName}</span>
+                </>
+              )}
             </div>
           </div>
 
           <div className="flex flex-col gap-4 md:flex-row md:flex-wrap md:gap-4 lg:flex-nowrap">
-            {shopCategories.map((item) => (
-              <div
-                key={item.id}
+            {topCategories.map((category) => (
+              <Link
+                key={category.id}
+                to={formatCategoryPath(category)}
                 className="relative w-full overflow-hidden md:w-[calc(50%-8px)] lg:w-[20%]"
               >
                 <img
-                  src={item.image}
-                  alt="Shop category"
-                  className="h-75 w-full object-cover md:h-55.75"
+                  src={
+                    category.img ||
+                    category.image ||
+                    'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=800&q=80'
+                  }
+                  alt={category.title || category.name}
+                  className="h-75 w-full object-cover md:h-[223px]"
                 />
 
                 <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/25">
                   <h3 className="text-[16px] font-bold leading-6 tracking-[0.1px] text-white">
-                    CLOTHS
+                    {category.title || category.name}
                   </h3>
                   <p className="text-[14px] leading-6 tracking-[0.2px] text-white">
-                    5 Items
+                    Rating: {category.rating || 0}
                   </p>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

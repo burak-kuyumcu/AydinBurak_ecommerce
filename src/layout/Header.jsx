@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import md5 from 'md5';
 import {
   Phone,
@@ -19,10 +19,17 @@ import {
   FaFacebookF,
   FaTwitter,
 } from 'react-icons/fa';
+import { fetchCategoriesIfNeeded } from '../store/actions/productActions';
 
 function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const user = useSelector((state) => state.client.user);
+  const categories = useSelector((state) => state.product.categories);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchCategoriesIfNeeded());
+  }, [dispatch]);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen((prev) => !prev);
@@ -37,6 +44,38 @@ function Header() {
         user.email.trim().toLowerCase()
       )}?d=identicon&s=40`
     : '';
+
+  const formatCategoryPath = (category) => {
+    const genderValue = String(category.gender || '').toLowerCase();
+    const genderText =
+      genderValue === 'k' || genderValue === 'kadın' || genderValue === 'kadin'
+        ? 'kadin'
+        : 'erkek';
+
+    const rawName = category.title || category.name || '';
+
+    const categoryName = rawName
+      .toLowerCase()
+      .replaceAll(' ', '-')
+      .replaceAll('ı', 'i')
+      .replaceAll('ş', 's')
+      .replaceAll('ç', 'c')
+      .replaceAll('ö', 'o')
+      .replaceAll('ü', 'u')
+      .replaceAll('ğ', 'g');
+
+    return `/shop/${genderText}/${categoryName}/${category.id}`;
+  };
+
+  const womenCategories = categories.filter((item) => {
+    const genderValue = String(item.gender || '').toLowerCase();
+    return genderValue === 'k' || genderValue === 'kadın' || genderValue === 'kadin';
+  });
+
+  const menCategories = categories.filter((item) => {
+    const genderValue = String(item.gender || '').toLowerCase();
+    return genderValue === 'e' || genderValue === 'erkek';
+  });
 
   return (
     <header className="w-full">
@@ -114,6 +153,17 @@ function Header() {
               >
                 Shop
               </Link>
+
+              {categories.map((category) => (
+                <Link
+                  key={category.id}
+                  to={formatCategoryPath(category)}
+                  onClick={closeMobileMenu}
+                  className="text-[20px] leading-8 text-[#737373]"
+                >
+                  {category.title || category.name}
+                </Link>
+              ))}
 
               <Link
                 to="/about"
@@ -223,13 +273,44 @@ function Header() {
                 Home
               </Link>
 
-              <Link
-                to="/shop"
-                className="flex items-center gap-1.5 text-[14px] font-semibold leading-6 tracking-[0.2px] text-[#737373]"
-              >
-                Shop
-                <ChevronDown size={16} />
-              </Link>
+              <div className="group relative">
+                <div className="flex cursor-pointer items-center gap-1.5 text-[14px] font-semibold leading-6 tracking-[0.2px] text-[#737373]">
+                  Shop
+                  <ChevronDown size={16} />
+                </div>
+
+                <div className="invisible absolute left-0 top-full z-50 mt-2 flex min-w-[420px] gap-12 bg-white p-6 opacity-0 shadow-lg transition-all group-hover:visible group-hover:opacity-100">
+                  <div className="flex flex-col gap-4">
+                    <h3 className="text-[16px] font-bold text-[#252B42]">
+                      Kadın
+                    </h3>
+                    {womenCategories.map((category) => (
+                      <Link
+                        key={category.id}
+                        to={formatCategoryPath(category)}
+                        className="text-[14px] font-semibold text-[#737373]"
+                      >
+                        {category.title || category.name}
+                      </Link>
+                    ))}
+                  </div>
+
+                  <div className="flex flex-col gap-4">
+                    <h3 className="text-[16px] font-bold text-[#252B42]">
+                      Erkek
+                    </h3>
+                    {menCategories.map((category) => (
+                      <Link
+                        key={category.id}
+                        to={formatCategoryPath(category)}
+                        className="text-[14px] font-semibold text-[#737373]"
+                      >
+                        {category.title || category.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
 
               <Link
                 to="/about"

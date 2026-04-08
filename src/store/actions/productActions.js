@@ -1,3 +1,5 @@
+import api from '../../services/api';
+
 export const SET_CATEGORIES = 'SET_CATEGORIES';
 export const SET_PRODUCT_LIST = 'SET_PRODUCT_LIST';
 export const SET_TOTAL = 'SET_TOTAL';
@@ -40,3 +42,23 @@ export const setFilter = (filter) => ({
   type: SET_FILTER,
   payload: filter,
 });
+
+export const fetchCategoriesIfNeeded = () => {
+  return async (dispatch, getState) => {
+    const { product } = getState();
+
+    if (product.categories && product.categories.length > 0) {
+      return;
+    }
+
+    try {
+      dispatch(setFetchState('FETCHING'));
+      const response = await api.get('/categories');
+      dispatch(setCategories(response.data));
+      dispatch(setFetchState('FETCHED'));
+    } catch (error) {
+      dispatch(setFetchState('FAILED'));
+      console.error('Categories could not be fetched:', error);
+    }
+  };
+};
