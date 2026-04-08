@@ -62,3 +62,28 @@ export const fetchCategoriesIfNeeded = () => {
     }
   };
 };
+
+export const fetchProducts = () => {
+  return async (dispatch, getState) => {
+    const { product } = getState();
+
+    try {
+      dispatch(setFetchState('FETCHING'));
+
+      const response = await api.get('/products', {
+        params: {
+          limit: product.limit,
+          offset: product.offset,
+          filter: product.filter || undefined,
+        },
+      });
+
+      dispatch(setTotal(response.data.total));
+      dispatch(setProductList(response.data.products));
+      dispatch(setFetchState('FETCHED'));
+    } catch (error) {
+      dispatch(setFetchState('FAILED'));
+      console.error('Products could not be fetched:', error);
+    }
+  };
+};

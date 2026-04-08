@@ -2,127 +2,24 @@ import { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ProductCard from '../components/ProductCard';
-import { fetchCategoriesIfNeeded } from '../store/actions/productActions';
+import {
+  fetchCategoriesIfNeeded,
+  fetchProducts,
+} from '../store/actions/productActions';
 
 function ShopPage() {
   const dispatch = useDispatch();
   const categories = useSelector((state) => state.product.categories);
+  const products = useSelector((state) => state.product.productList);
+  const total = useSelector((state) => state.product.total);
+  const fetchState = useSelector((state) => state.product.fetchState);
+
   const { gender, categoryName, categoryId } = useParams();
 
   useEffect(() => {
     dispatch(fetchCategoriesIfNeeded());
+    dispatch(fetchProducts());
   }, [dispatch]);
-
-  const products = [
-    {
-      id: 1,
-      title: 'Graphic Design',
-      department: 'English Department',
-      oldPrice: '16.48',
-      price: '6.48',
-      image:
-        'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=800&q=80',
-    },
-    {
-      id: 2,
-      title: 'Graphic Design',
-      department: 'English Department',
-      oldPrice: '16.48',
-      price: '6.48',
-      image:
-        'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80',
-    },
-    {
-      id: 3,
-      title: 'Graphic Design',
-      department: 'English Department',
-      oldPrice: '16.48',
-      price: '6.48',
-      image:
-        'https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=800&q=80',
-    },
-    {
-      id: 4,
-      title: 'Graphic Design',
-      department: 'English Department',
-      oldPrice: '16.48',
-      price: '6.48',
-      image:
-        'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=800&q=80',
-    },
-    {
-      id: 5,
-      title: 'Graphic Design',
-      department: 'English Department',
-      oldPrice: '16.48',
-      price: '6.48',
-      image:
-        'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=800&q=80',
-    },
-    {
-      id: 6,
-      title: 'Graphic Design',
-      department: 'English Department',
-      oldPrice: '16.48',
-      price: '6.48',
-      image:
-        'https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=800&q=80',
-    },
-    {
-      id: 7,
-      title: 'Graphic Design',
-      department: 'English Department',
-      oldPrice: '16.48',
-      price: '6.48',
-      image:
-        'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=800&q=80',
-    },
-    {
-      id: 8,
-      title: 'Graphic Design',
-      department: 'English Department',
-      oldPrice: '16.48',
-      price: '6.48',
-      image:
-        'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=800&q=80',
-    },
-    {
-      id: 9,
-      title: 'Graphic Design',
-      department: 'English Department',
-      oldPrice: '16.48',
-      price: '6.48',
-      image:
-        'https://images.unsplash.com/photo-1495385794356-15371f348c31?auto=format&fit=crop&w=800&q=80',
-    },
-    {
-      id: 10,
-      title: 'Graphic Design',
-      department: 'English Department',
-      oldPrice: '16.48',
-      price: '6.48',
-      image:
-        'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=800&q=80',
-    },
-    {
-      id: 11,
-      title: 'Graphic Design',
-      department: 'English Department',
-      oldPrice: '16.48',
-      price: '6.48',
-      image:
-        'https://images.unsplash.com/photo-1520975916090-3105956dac38?auto=format&fit=crop&w=800&q=80',
-    },
-    {
-      id: 12,
-      title: 'Graphic Design',
-      department: 'English Department',
-      oldPrice: '16.48',
-      price: '6.48',
-      image:
-        'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=800&q=80',
-    },
-  ];
 
   const formatCategoryPath = (category) => {
     const genderValue = String(category.gender || '').toLowerCase();
@@ -227,7 +124,7 @@ function ShopPage() {
       <section className="w-full bg-white">
         <div className="mx-auto flex w-full max-w-330 flex-col gap-4 px-4 py-6 md:px-6 lg:flex-row lg:items-center lg:justify-between xl:px-8">
           <span className="text-center text-[14px] font-semibold text-[#737373] lg:text-left">
-            Showing all 12 results
+            Showing all {total} results
           </span>
 
           <div className="flex items-center justify-center gap-4">
@@ -257,16 +154,33 @@ function ShopPage() {
       </section>
 
       <section className="mx-auto flex w-full max-w-330 flex-col gap-8 px-4 py-8 md:px-6 md:py-10 xl:px-8">
-        <div className="flex flex-col gap-6 md:flex-row md:flex-wrap md:gap-7.5">
-          {products.map((product) => (
-            <div
-              key={product.id}
-              className="w-full md:w-[calc(50%-15px)] lg:w-[calc(25%-24px)]"
-            >
-              <ProductCard {...product} />
-            </div>
-          ))}
-        </div>
+        {fetchState === 'FETCHING' ? (
+          <div className="flex min-h-[300px] items-center justify-center">
+            <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#E6E6E6] border-t-[#23A6F0]" />
+          </div>
+        ) : (
+          <div className="flex flex-col gap-6 md:flex-row md:flex-wrap md:gap-7.5">
+            {products.map((product) => (
+              <div
+                key={product.id}
+                className="w-full md:w-[calc(50%-15px)] lg:w-[calc(25%-24px)]"
+              >
+                <ProductCard
+                  id={product.id}
+                  title={product.name || product.title}
+                  department={product.category || 'Category'}
+                  oldPrice={product.price}
+                  price={product.price}
+                  image={
+                    product.images?.[0]?.url ||
+                    product.image ||
+                    'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=800&q=80'
+                  }
+                />
+              </div>
+            ))}
+          </div>
+        )}
 
         <div className="flex justify-center gap-0 py-2">
           <button className="border border-[#E9E9E9] bg-[#F3F3F3] px-4 py-2.5 text-[14px] text-[#BDBDBD]">
