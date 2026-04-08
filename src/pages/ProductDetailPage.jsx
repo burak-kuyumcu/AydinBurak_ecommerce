@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProductById } from '../store/actions/productActions';
+import { addToCart } from '../store/actions/shoppingCartActions';
 
 function ProductDetailPage() {
   const dispatch = useDispatch();
@@ -14,6 +15,10 @@ function ProductDetailPage() {
   useEffect(() => {
     dispatch(fetchProductById(productId));
   }, [dispatch, productId]);
+
+  const handleAddToCart = () => {
+    dispatch(addToCart(product));
+  };
 
   if (fetchState === 'FETCHING' || !product) {
     return (
@@ -78,7 +83,10 @@ function ProductDetailPage() {
               <span className="h-5 w-5 rounded-full bg-[#252B42]" />
             </div>
 
-            <button className="w-fit bg-[#23A6F0] px-8 py-3 text-[14px] font-bold text-white">
+            <button
+              onClick={handleAddToCart}
+              className="w-fit bg-[#23A6F0] px-8 py-3 text-[14px] font-bold text-white"
+            >
               Add to Cart
             </button>
           </div>

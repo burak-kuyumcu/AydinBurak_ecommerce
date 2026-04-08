@@ -16,3 +16,35 @@ export const setAddress = (address) => ({
   type: SET_ADDRESS,
   payload: address,
 });
+
+export const addToCart = (product) => {
+  return (dispatch, getState) => {
+    const { shoppingCart } = getState();
+    const currentCart = shoppingCart.cart || [];
+
+    const existingItem = currentCart.find(
+      (item) => String(item.product.id) === String(product.id)
+    );
+
+    let updatedCart;
+
+    if (existingItem) {
+      updatedCart = currentCart.map((item) =>
+        String(item.product.id) === String(product.id)
+          ? { ...item, count: item.count + 1 }
+          : item
+      );
+    } else {
+      updatedCart = [
+        ...currentCart,
+        {
+          count: 1,
+          checked: true,
+          product,
+        },
+      ];
+    }
+
+    dispatch(setCart(updatedCart));
+  };
+};
