@@ -1,10 +1,12 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ProductCard from '../components/ProductCard';
 import {
   fetchCategoriesIfNeeded,
   fetchProducts,
+  setFilter,
+  setSort,
 } from '../store/actions/productActions';
 
 function ShopPage() {
@@ -13,13 +15,24 @@ function ShopPage() {
   const products = useSelector((state) => state.product.productList);
   const total = useSelector((state) => state.product.total);
   const fetchState = useSelector((state) => state.product.fetchState);
+  const selectedSort = useSelector((state) => state.product.sort);
+  const selectedFilter = useSelector((state) => state.product.filter);
 
   const { gender, categoryName, categoryId } = useParams();
 
+  const [filterInput, setFilterInput] = useState(selectedFilter || '');
+
   useEffect(() => {
     dispatch(fetchCategoriesIfNeeded());
-    dispatch(fetchProducts());
   }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(
+      fetchProducts({
+        category: categoryId || undefined,
+      })
+    );
+  }, [dispatch, categoryId]);
 
   const formatCategoryPath = (category) => {
     const genderValue = String(category.gender || '').toLowerCase();
@@ -57,6 +70,21 @@ function ShopPage() {
   const topCategories = [...categories]
     .sort((a, b) => Number(b.rating || 0) - Number(a.rating || 0))
     .slice(0, 5);
+
+  const handleSortChange = (event) => {
+    dispatch(setSort(event.target.value));
+  };
+
+  const handleFilterClick = () => {
+    dispatch(setFilter(filterInput));
+    dispatch(
+      fetchProducts({
+        category: categoryId || undefined,
+        sort: selectedSort,
+        filter: filterInput,
+      })
+    );
+  };
 
   return (
     <div className="flex w-full flex-col bg-[#FAFAFA]">
@@ -140,13 +168,31 @@ function ShopPage() {
             </div>
           </div>
 
-          <div className="flex items-center justify-center gap-2">
-            <select className="h-10 border border-[#DDDDDD] bg-white px-3 text-[14px] text-[#737373]">
-              <option>Popularity</option>
-              <option>Price</option>
+          <div className="flex flex-col items-center justify-center gap-2 md:flex-row">
+            <select
+              value={selectedSort}
+              onChange={handleSortChange}
+              className="h-10 border border-[#DDDDDD] bg-white px-3 text-[14px] text-[#737373]"
+            >
+              <option value="">Sort By</option>
+              <option value="price:asc">price:asc</option>
+              <option value="price:desc">price:desc</option>
+              <option value="rating:asc">rating:asc</option>
+              <option value="rating:desc">rating:desc</option>
             </select>
 
-            <button className="h-10 bg-[#23A6F0] px-5 text-[14px] font-semibold text-white">
+            <input
+              type="text"
+              value={filterInput}
+              onChange={(event) => setFilterInput(event.target.value)}
+              placeholder="Filter products"
+              className="h-10 border border-[#DDDDDD] bg-white px-3 text-[14px] text-[#737373] outline-none"
+            />
+
+            <button
+              onClick={handleFilterClick}
+              className="h-10 bg-[#23A6F0] px-5 text-[14px] font-semibold text-white"
+            >
               Filter
             </button>
           </div>
@@ -168,11 +214,12 @@ function ShopPage() {
                 <ProductCard
                   id={product.id}
                   title={product.name || product.title}
-                  department={product.category || 'Category'}
+                  department={product.category?.title || product.category || 'Category'}
                   oldPrice={product.price}
                   price={product.price}
                   image={
                     product.images?.[0]?.url ||
+                    product.images?.[0] ||
                     product.image ||
                     'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=800&q=80'
                   }
