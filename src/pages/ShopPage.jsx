@@ -7,6 +7,7 @@ import {
   fetchProducts,
   setFilter,
   setSort,
+  setOffset,
 } from '../store/actions/productActions';
 
 function ShopPage() {
@@ -17,6 +18,8 @@ function ShopPage() {
   const fetchState = useSelector((state) => state.product.fetchState);
   const selectedSort = useSelector((state) => state.product.sort);
   const selectedFilter = useSelector((state) => state.product.filter);
+  const limit = useSelector((state) => state.product.limit);
+  const offset = useSelector((state) => state.product.offset);
 
   const { gender, categoryName, categoryId } = useParams();
 
@@ -27,9 +30,11 @@ function ShopPage() {
   }, [dispatch]);
 
   useEffect(() => {
+    dispatch(setOffset(0));
     dispatch(
       fetchProducts({
         category: categoryId || undefined,
+        offset: 0,
       })
     );
   }, [dispatch, categoryId]);
@@ -76,14 +81,43 @@ function ShopPage() {
   };
 
   const handleFilterClick = () => {
+    dispatch(setOffset(0));
     dispatch(setFilter(filterInput));
     dispatch(
       fetchProducts({
         category: categoryId || undefined,
         sort: selectedSort,
         filter: filterInput,
+        offset: 0,
       })
     );
+  };
+
+  const currentPage = Math.floor(offset / limit) + 1;
+  const totalPages = Math.ceil(total / limit);
+
+  const handlePageChange = (pageNumber) => {
+    const newOffset = (pageNumber - 1) * limit;
+
+    dispatch(setOffset(newOffset));
+    dispatch(
+      fetchProducts({
+        category: categoryId || undefined,
+        sort: selectedSort,
+        filter: selectedFilter,
+        offset: newOffset,
+      })
+    );
+  };
+
+  const handleFirstPage = () => {
+    handlePageChange(1);
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      handlePageChange(currentPage + 1);
+    }
   };
 
   return (
@@ -230,19 +264,44 @@ function ShopPage() {
         )}
 
         <div className="flex justify-center gap-0 py-2">
-          <button className="border border-[#E9E9E9] bg-[#F3F3F3] px-4 py-2.5 text-[14px] text-[#BDBDBD]">
+          <button
+            onClick={handleFirstPage}
+            disabled={currentPage === 1}
+            className="border border-[#E9E9E9] bg-[#F3F3F3] px-4 py-2.5 text-[14px] text-[#BDBDBD] disabled:cursor-not-allowed disabled:opacity-60"
+          >
             First
           </button>
-          <button className="border border-[#E9E9E9] bg-white px-3.5 py-2.5 text-[14px] text-[#23A6F0]">
-            1
-          </button>
-          <button className="border border-[#E9E9E9] bg-[#23A6F0] px-3.5 py-2.5 text-[14px] text-white">
-            2
-          </button>
-          <button className="border border-[#E9E9E9] bg-white px-3.5 py-2.5 text-[14px] text-[#23A6F0]">
-            3
-          </button>
-          <button className="border border-[#E9E9E9] bg-white px-4 py-2.5 text-[14px] text-[#23A6F0]">
+
+          {Array.from({ length: Math.min(totalPages, 3) }, (_, index) => {
+            let pageNumber = index + 1;
+
+            if (currentPage > 2 && totalPages > 3) {
+              pageNumber = currentPage - 1 + index;
+              if (pageNumber > totalPages) {
+                pageNumber = totalPages - (2 - index);
+              }
+            }
+
+            return (
+              <button
+                key={pageNumber}
+                onClick={() => handlePageChange(pageNumber)}
+                className={`border border-[#E9E9E9] px-3.5 py-2.5 text-[14px] ${
+                  currentPage === pageNumber
+                    ? 'bg-[#23A6F0] text-white'
+                    : 'bg-white text-[#23A6F0]'
+                }`}
+              >
+                {pageNumber}
+              </button>
+            );
+          })}
+
+          <button
+            onClick={handleNextPage}
+            disabled={currentPage === totalPages || totalPages === 0}
+            className="border border-[#E9E9E9] bg-white px-4 py-2.5 text-[14px] text-[#23A6F0] disabled:cursor-not-allowed disabled:opacity-60"
+          >
             Next
           </button>
         </div>

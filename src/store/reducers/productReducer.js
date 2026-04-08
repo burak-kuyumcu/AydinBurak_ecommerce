@@ -17,7 +17,6 @@ const initialState = {
   offset: 0,
   filter: '',
   sort: '',
-  category: null,
   fetchState: 'NOT_FETCHED',
 };
 

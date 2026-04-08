@@ -77,18 +77,15 @@ export const fetchProducts = (extraParams = {}) => {
       dispatch(setFetchState('FETCHING'));
 
       const params = {
-        limit: product.limit,
-        offset: product.offset,
+        limit:
+          extraParams.limit !== undefined ? extraParams.limit : product.limit,
+        offset:
+          extraParams.offset !== undefined ? extraParams.offset : product.offset,
       };
 
-      const category =
-        extraParams.category !== undefined
-          ? extraParams.category
-          : product.category;
-
+      const category = extraParams.category;
       const sort =
         extraParams.sort !== undefined ? extraParams.sort : product.sort;
-
       const filter =
         extraParams.filter !== undefined ? extraParams.filter : product.filter;
 
