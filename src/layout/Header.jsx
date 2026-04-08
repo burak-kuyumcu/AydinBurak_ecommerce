@@ -168,14 +168,24 @@ function Header() {
                 </span>
               </div>
             ) : (
-              <Link
-                to="/login"
-                onClick={closeMobileMenu}
-                className="flex items-center gap-2 text-[24px] leading-9 text-[#23A6F0]"
-              >
-                <User size={20} />
-                Login / Register
-              </Link>
+              <div className="flex flex-col items-center gap-3 text-[#23A6F0]">
+                <Link
+                  to="/login"
+                  onClick={closeMobileMenu}
+                  className="flex items-center gap-2 text-[24px] leading-9"
+                >
+                  <User size={20} />
+                  Login
+                </Link>
+
+                <Link
+                  to="/signup"
+                  onClick={closeMobileMenu}
+                  className="text-[20px] font-semibold"
+                >
+                  Register
+                </Link>
+              </div>
             )}
 
             <div className="flex flex-col items-center gap-4 text-[#23A6F0]">
@@ -271,13 +281,22 @@ function Header() {
                 </span>
               </div>
             ) : (
-              <Link
-                to="/login"
-                className="flex items-center gap-1.5 text-[14px] font-semibold leading-6 tracking-[0.2px] text-[#23A6F0]"
-              >
-                <User size={16} />
-                Login / Register
-              </Link>
+              <div className="flex items-center gap-3">
+                <Link
+                  to="/login"
+                  className="flex items-center gap-1.5 text-[14px] font-semibold leading-6 tracking-[0.2px] text-[#23A6F0]"
+                >
+                  <User size={16} />
+                  Login
+                </Link>
+
+                <Link
+                  to="/signup"
+                  className="text-[14px] font-semibold leading-6 tracking-[0.2px] text-[#23A6F0]"
+                >
+                  Register
+                </Link>
+              </div>
             )}
 
             <button type="button" className="text-[#23A6F0]">

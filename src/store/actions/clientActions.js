@@ -1,4 +1,4 @@
-import api from '../../services/api';
+import api, { setApiToken } from '../../services/api';
 
 export const SET_USER = 'SET_USER';
 export const SET_ROLES = 'SET_ROLES';
@@ -8,6 +8,11 @@ export const SET_LANGUAGE = 'SET_LANGUAGE';
 export const setUser = (user) => ({
   type: SET_USER,
   payload: user,
+});
+
+export const clearUser = () => ({
+  type: SET_USER,
+  payload: {},
 });
 
 export const setRoles = (roles) => ({
@@ -56,8 +61,10 @@ export const loginUser = (formData, history, previousPath) => {
 
       if (formData.rememberMe && userData.token) {
         localStorage.setItem('token', userData.token);
+        setApiToken(userData.token);
       } else {
         localStorage.removeItem('token');
+        setApiToken(null);
       }
 
       history.push(previousPath || '/');
@@ -67,5 +74,48 @@ export const loginUser = (formData, history, previousPath) => {
         error?.response?.data?.message || 'Login failed. Please try again.';
       return { success: false, message };
     }
+  };
+};
+
+export const verifyStoredToken = () => {
+  return async (dispatch) => {
+    const storedToken = localStorage.getItem('token');
+
+    if (!storedToken) {
+      return;
+    }
+
+    try {
+      setApiToken(storedToken);
+
+      const response = await api.get('/verify');
+      const verifiedUser = response.data;
+
+      dispatch(setUser(verifiedUser));
+
+      if (verifiedUser.token) {
+        localStorage.setItem('token', verifiedUser.token);
+        setApiToken(verifiedUser.token);
+      } else {
+        localStorage.setItem('token', storedToken);
+        setApiToken(storedToken);
+      }
+
+      return { success: true };
+    } catch (error) {
+      localStorage.removeItem('token');
+      setApiToken(null);
+      dispatch(clearUser());
+
+      return { success: false };
+    }
+  };
+};
+
+export const logoutUser = () => {
+  return (dispatch) => {
+    localStorage.removeItem('token');
+    setApiToken(null);
+    dispatch(clearUser());
   };
 };
