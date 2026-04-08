@@ -8,6 +8,7 @@ export const SET_LIMIT = 'SET_LIMIT';
 export const SET_OFFSET = 'SET_OFFSET';
 export const SET_FILTER = 'SET_FILTER';
 export const SET_SORT = 'SET_SORT';
+export const SET_PRODUCT_DETAIL = 'SET_PRODUCT_DETAIL';
 
 export const setCategories = (categories) => ({
   type: SET_CATEGORIES,
@@ -47,6 +48,11 @@ export const setFilter = (filter) => ({
 export const setSort = (sort) => ({
   type: SET_SORT,
   payload: sort,
+});
+
+export const setProductDetail = (product) => ({
+  type: SET_PRODUCT_DETAIL,
+  payload: product,
 });
 
 export const fetchCategoriesIfNeeded = () => {
@@ -89,17 +95,9 @@ export const fetchProducts = (extraParams = {}) => {
       const filter =
         extraParams.filter !== undefined ? extraParams.filter : product.filter;
 
-      if (category) {
-        params.category = category;
-      }
-
-      if (sort) {
-        params.sort = sort;
-      }
-
-      if (filter) {
-        params.filter = filter;
-      }
+      if (category) params.category = category;
+      if (sort) params.sort = sort;
+      if (filter) params.filter = filter;
 
       const response = await api.get('/products', { params });
 
@@ -109,6 +107,20 @@ export const fetchProducts = (extraParams = {}) => {
     } catch (error) {
       dispatch(setFetchState('FAILED'));
       console.error('Products could not be fetched:', error);
+    }
+  };
+};
+
+export const fetchProductById = (productId) => {
+  return async (dispatch) => {
+    try {
+      dispatch(setFetchState('FETCHING'));
+      const response = await api.get(`/products/${productId}`);
+      dispatch(setProductDetail(response.data));
+      dispatch(setFetchState('FETCHED'));
+    } catch (error) {
+      dispatch(setFetchState('FAILED'));
+      console.error('Product detail could not be fetched:', error);
     }
   };
 };

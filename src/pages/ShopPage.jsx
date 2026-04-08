@@ -12,6 +12,7 @@ import {
 
 function ShopPage() {
   const dispatch = useDispatch();
+
   const categories = useSelector((state) => state.product.categories);
   const products = useSelector((state) => state.product.productList);
   const total = useSelector((state) => state.product.total);
@@ -59,6 +60,24 @@ function ShopPage() {
       .replaceAll('ğ', 'g');
 
     return `/shop/${genderText}/${normalizedCategoryName}/${category.id}`;
+  };
+
+  const formatProductDetailPath = (product) => {
+    const currentGender = gender || 'erkek';
+    const currentCategoryName = categoryName || 'kategori';
+    const currentCategoryId = categoryId || product.category_id || '0';
+
+    const productSlug = String(product.name || product.title || 'product')
+      .toLowerCase()
+      .replaceAll(' ', '-')
+      .replaceAll('ı', 'i')
+      .replaceAll('ş', 's')
+      .replaceAll('ç', 'c')
+      .replaceAll('ö', 'o')
+      .replaceAll('ü', 'u')
+      .replaceAll('ğ', 'g');
+
+    return `/shop/${currentGender}/${currentCategoryName}/${currentCategoryId}/${productSlug}/${product.id}`;
   };
 
   const currentCategory = categories.find(
@@ -257,6 +276,7 @@ function ShopPage() {
                     product.image ||
                     'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=800&q=80'
                   }
+                  detailPath={formatProductDetailPath(product)}
                 />
               </div>
             ))}
