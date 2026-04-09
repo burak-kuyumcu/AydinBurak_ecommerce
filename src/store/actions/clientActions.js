@@ -177,3 +177,62 @@ export const deleteAddress = (addressId) => {
     }
   };
 };
+
+export const SET_CREDIT_CARDS = 'SET_CREDIT_CARDS';
+
+export const setCreditCards = (creditCards) => ({
+  type: SET_CREDIT_CARDS,
+  payload: creditCards,
+});
+
+export const fetchCards = () => {
+  return async (dispatch) => {
+    try {
+      const response = await api.get('/user/card');
+      dispatch(setCreditCards(response.data));
+      return { success: true };
+    } catch (error) {
+      console.error('Cards could not be fetched:', error);
+      return { success: false };
+    }
+  };
+};
+
+export const createCard = (cardData) => {
+  return async (dispatch) => {
+    try {
+      await api.post('/user/card', cardData);
+      await dispatch(fetchCards());
+      return { success: true };
+    } catch (error) {
+      console.error('Card could not be created:', error);
+      return { success: false };
+    }
+  };
+};
+
+export const updateCard = (cardData) => {
+  return async (dispatch) => {
+    try {
+      await api.put('/user/card', cardData);
+      await dispatch(fetchCards());
+      return { success: true };
+    } catch (error) {
+      console.error('Card could not be updated:', error);
+      return { success: false };
+    }
+  };
+};
+
+export const deleteCard = (cardId) => {
+  return async (dispatch) => {
+    try {
+      await api.delete(`/user/card/${cardId}`);
+      await dispatch(fetchCards());
+      return { success: true };
+    } catch (error) {
+      console.error('Card could not be deleted:', error);
+      return { success: false };
+    }
+  };
+};

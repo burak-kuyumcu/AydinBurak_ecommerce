@@ -10,6 +10,7 @@ import PricingPage from '../pages/PricingPage';
 import LoginPage from '../pages/LoginPage';
 import CartPage from '../pages/CartPage';
 import AddressPage from '../pages/AddressPage';
+import PaymentPage from '../pages/PaymentPage';
 import ProtectedRoute from '../components/ProtectedRoute';
 
 function PageContent() {
@@ -28,6 +29,7 @@ function PageContent() {
         />
         <Route path="/cart" component={CartPage} />
         <ProtectedRoute path="/checkout/address" component={AddressPage} />
+        <ProtectedRoute path="/checkout/payment" component={PaymentPage} />
         <Route path="/contact" component={ContactPage} />
         <Route path="/team" component={TeamPage} />
         <Route path="/about" component={AboutPage} />
