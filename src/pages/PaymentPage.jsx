@@ -6,7 +6,10 @@ import {
   updateCard,
   deleteCard,
 } from '../store/actions/clientActions';
+import { setPayment, createOrder } from '../store/actions/shoppingCartActions';
 import { ChevronRight, Trash2, Pencil } from 'lucide-react';
+import { useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const emptyForm = {
   card_no: '',
@@ -17,12 +20,14 @@ const emptyForm = {
 
 function PaymentPage() {
   const dispatch = useDispatch();
+  const history = useHistory();
+
   const creditCards = useSelector((state) => state.client.creditCards);
   const cart = useSelector((state) => state.shoppingCart.cart);
+  const selectedPayment = useSelector((state) => state.shoppingCart.payment);
 
   const [showForm, setShowForm] = useState(false);
   const [editingCardId, setEditingCardId] = useState(null);
-  const [selectedCardId, setSelectedCardId] = useState(null);
   const [formData, setFormData] = useState(emptyForm);
   const [use3DSecure, setUse3DSecure] = useState(false);
 
@@ -79,9 +84,6 @@ function PaymentPage() {
 
   const handleDelete = async (cardId) => {
     await dispatch(deleteCard(cardId));
-    if (selectedCardId === cardId) {
-      setSelectedCardId(null);
-    }
   };
 
   const handleSubmit = async (event) => {
@@ -112,6 +114,17 @@ function PaymentPage() {
       setShowForm(false);
       setEditingCardId(null);
       setFormData(emptyForm);
+    }
+  };
+
+  const handleCompletePayment = async () => {
+    const result = await dispatch(createOrder());
+
+    if (result.success) {
+      toast.success('Congratulations! Your order has been created.');
+      history.push('/');
+    } else {
+      toast.error(result.message);
     }
   };
 
@@ -162,7 +175,7 @@ function PaymentPage() {
                     <div
                       key={card.id}
                       className={`rounded-[10px] border p-4 transition ${
-                        selectedCardId === card.id
+                        selectedPayment?.id === card.id
                           ? 'border-[#23A6F0] bg-[#F7FCFF]'
                           : 'border-[#E6E6E6]'
                       }`}
@@ -172,8 +185,15 @@ function PaymentPage() {
                           <input
                             type="radio"
                             name="selectedCard"
-                            checked={selectedCardId === card.id}
-                            onChange={() => setSelectedCardId(card.id)}
+                            checked={selectedPayment?.id === card.id}
+                            onChange={() =>
+                              dispatch(
+                                setPayment({
+                                  ...card,
+                                  cvv: 321,
+                                })
+                              )
+                            }
                             className="mt-1"
                           />
 
@@ -318,6 +338,7 @@ function PaymentPage() {
             <div className="rounded-[10px] bg-white p-5 shadow-sm">
               <button
                 type="button"
+                onClick={handleCompletePayment}
                 className="mb-5 flex w-full items-center justify-center gap-2 rounded-[8px] bg-[#23A6F0] px-4 py-3 text-[16px] font-bold text-white"
               >
                 Complete Payment
@@ -340,7 +361,7 @@ function PaymentPage() {
                   <div className="flex items-center justify-between">
                     <span>Shipping</span>
                     <span className="font-semibold text-[#252B42]">
-                      $29.99
+                      ${shippingTotal.toFixed(2)}
                     </span>
                   </div>
 
@@ -366,6 +387,7 @@ function PaymentPage() {
 
               <button
                 type="button"
+                onClick={handleCompletePayment}
                 className="mt-5 flex w-full items-center justify-center gap-2 rounded-[8px] bg-[#23A6F0] px-4 py-3 text-[16px] font-bold text-white"
               >
                 Complete Payment

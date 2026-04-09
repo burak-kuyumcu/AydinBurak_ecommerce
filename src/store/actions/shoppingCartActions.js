@@ -1,3 +1,5 @@
+import api from '../../services/api';
+
 export const SET_CART = 'SET_CART';
 export const SET_PAYMENT = 'SET_PAYMENT';
 export const SET_ADDRESS = 'SET_ADDRESS';
@@ -102,5 +104,66 @@ export const toggleCartItemChecked = (productId) => {
     );
 
     dispatch(setCart(updatedCart));
+  };
+};
+
+export const createOrder = () => {
+  return async (dispatch, getState) => {
+    const { shoppingCart } = getState();
+    const { cart, payment, address } = shoppingCart;
+
+    const checkedItems = cart.filter((item) => item.checked);
+
+    if (!address?.id) {
+      return { success: false, message: 'Please select an address.' };
+    }
+
+    if (!payment?.id && !payment?.card_no) {
+      return { success: false, message: 'Please select a payment card.' };
+    }
+
+    if (checkedItems.length === 0) {
+      return { success: false, message: 'There is no selected product in cart.' };
+    }
+
+    const productsPrice = checkedItems.reduce(
+      (total, item) => total + Number(item.product.price || 0) * item.count,
+      0
+    );
+
+    const payload = {
+      address_id: address.id,
+      order_date: new Date().toISOString(),
+      card_no: payment.card_no,
+      card_name: payment.name_on_card,
+      card_expire_month: Number(payment.expire_month),
+      card_expire_year: Number(payment.expire_year),
+      card_cvv: Number(payment.cvv || 321),
+      price: Number(productsPrice.toFixed(2)),
+      products: checkedItems.map((item) => ({
+        product_id: item.product.id,
+        count: item.count,
+        detail: item.product.name || item.product.title || 'standard',
+      })),
+    };
+
+    try {
+      await api.post('/order', payload);
+
+      dispatch(setCart([]));
+      dispatch(setPayment({}));
+      dispatch(setAddress({}));
+
+      return {
+        success: true,
+        message: 'Your order has been created successfully.',
+      };
+    } catch (error) {
+      console.error('Order could not be created:', error);
+      return {
+        success: false,
+        message: error?.response?.data?.message || 'Order could not be created.',
+      };
+    }
   };
 };

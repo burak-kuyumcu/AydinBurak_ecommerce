@@ -6,7 +6,9 @@ import {
   updateAddress,
   deleteAddress,
 } from '../store/actions/clientActions';
+import { setAddress } from '../store/actions/shoppingCartActions';
 import { ChevronRight, Trash2, Pencil } from 'lucide-react';
+import { useHistory } from 'react-router-dom';
 
 const emptyForm = {
   title: '',
@@ -20,8 +22,11 @@ const emptyForm = {
 
 function AddressPage() {
   const dispatch = useDispatch();
+  const history = useHistory();
+
   const addressList = useSelector((state) => state.client.addressList);
   const cart = useSelector((state) => state.shoppingCart.cart);
+  const selectedAddress = useSelector((state) => state.shoppingCart.address);
 
   const [showForm, setShowForm] = useState(false);
   const [editingAddressId, setEditingAddressId] = useState(null);
@@ -134,7 +139,11 @@ function AddressPage() {
                   addressList.map((address) => (
                     <div
                       key={address.id}
-                      className="rounded-[10px] border border-[#E6E6E6] p-4"
+                      className={`rounded-[10px] border p-4 ${
+                        selectedAddress?.id === address.id
+                          ? 'border-[#23A6F0] bg-[#F7FCFF]'
+                          : 'border-[#E6E6E6]'
+                      }`}
                     >
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex flex-col gap-2">
@@ -160,6 +169,14 @@ function AddressPage() {
                         </div>
 
                         <div className="flex items-center gap-3">
+                          <button
+                            type="button"
+                            onClick={() => dispatch(setAddress(address))}
+                            className="rounded-[8px] border border-[#23A6F0] px-3 py-2 text-[13px] font-semibold text-[#23A6F0]"
+                          >
+                            Select
+                          </button>
+
                           <button
                             onClick={() => handleEdit(address)}
                             className="text-[#23A6F0]"
@@ -187,10 +204,7 @@ function AddressPage() {
                   {editingAddressId ? 'Update Address' : 'Add New Address'}
                 </h2>
 
-                <form
-                  onSubmit={handleSubmit}
-                  className="flex flex-col gap-4"
-                >
+                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                   <input
                     name="title"
                     value={formData.title}
@@ -281,9 +295,10 @@ function AddressPage() {
             <div className="rounded-[10px] bg-white p-5 shadow-sm">
               <button
                 type="button"
+                onClick={() => history.push('/checkout/payment')}
                 className="mb-5 flex w-full items-center justify-center gap-2 rounded-[8px] bg-[#23A6F0] px-4 py-3 text-[16px] font-bold text-white"
               >
-                Create Order
+                Continue to Payment
                 <ChevronRight size={18} />
               </button>
 
@@ -329,9 +344,10 @@ function AddressPage() {
 
               <button
                 type="button"
+                onClick={() => history.push('/checkout/payment')}
                 className="mt-5 flex w-full items-center justify-center gap-2 rounded-[8px] bg-[#23A6F0] px-4 py-3 text-[16px] font-bold text-white"
               >
-                Create Order
+                Continue to Payment
                 <ChevronRight size={18} />
               </button>
             </div>
