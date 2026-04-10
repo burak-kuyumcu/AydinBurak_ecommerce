@@ -4,72 +4,87 @@ function AboutPage() {
   const teamMembers = [
     {
       id: 1,
-      name: 'Zeynep Aksoy',
-      role: 'Project Manager',
-      image:
-        'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80',
+      name: 'Username',
+      role: 'Profession',
+      image: '/team1.jpg',
     },
     {
       id: 2,
-      name: 'Burak Kuyumcu',
-      role: 'Full Stack Developer',
-      image:
-        'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&q=80',
+      name: 'Username',
+      role: 'Profession',
+      image: '/team2.jpg',
     },
     {
       id: 3,
-      name: 'Gökhan Özdemir',
-      role: 'Frontend Developer',
-      image:
-        'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=800&q=80',
+      name: 'Username',
+      role: 'Profession',
+      image: '/team3.jpg',
     },
+  ];
+
+  const companyLogos = [
+    { id: 1, name: 'hooli', image: '/hooli.svg' },
+    { id: 2, name: 'lyft', image: '/lyft.svg' },
+    { id: 3, name: 'leaf', image: '/leaf.svg' },
+    { id: 4, name: 'stripe', image: '/stripe.svg' },
+    { id: 5, name: 'aws', image: '/aws.svg' },
+    { id: 6, name: 'reddit', image: '/reddit.svg' },
   ];
 
   return (
     <div className="flex w-full flex-col bg-white">
       <section className="w-full bg-[#FAFAFA]">
-        <div className="mx-auto flex w-full max-w-330 flex-col gap-10 px-4 py-10 md:px-6 lg:flex-row lg:items-center lg:justify-between xl:px-8">
-          <div className="flex w-full flex-col gap-6 text-center lg:w-1/2 lg:text-left">
+        <div className="mx-auto flex w-full max-w-330 flex-col gap-8 px-4 py-10 md:px-6 lg:flex-row lg:items-center lg:justify-between xl:px-8">
+          <div className="flex w-full flex-col gap-5 text-center lg:w-[42%] lg:text-left">
             <span className="text-[14px] font-bold tracking-[0.2px] text-[#252B42]">
               ABOUT COMPANY
             </span>
 
-            <h1 className="text-[40px] font-bold leading-[50px] tracking-[0.2px] text-[#252B42] md:text-[58px] md:leading-[80px]">
+            <h1 className="text-[40px] font-bold leading-[50px] tracking-[0.2px] text-[#252B42] md:text-[48px] md:leading-[60px]">
               ABOUT US
             </h1>
 
-            <p className="max-w-[320px] self-center text-[20px] leading-[30px] text-[#737373] lg:self-start">
+            <p className="max-w-[280px] self-center text-[14px] leading-[20px] text-[#737373] lg:self-start">
               We know how large objects will act, but things on a small scale
             </p>
 
-            <button className="w-fit self-center bg-[#23A6F0] px-10 py-4 text-[14px] font-bold text-white lg:self-start">
+            <button className="w-fit self-center bg-[#23A6F0] px-8 py-3 text-[14px] font-bold text-white lg:self-start">
               Get Quote Now
             </button>
           </div>
 
-          <div className="flex w-full justify-center lg:w-1/2">
-            <img
-              src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1200&q=80"
-              alt="About hero"
-              className="h-[300px] w-full max-w-[500px] object-cover md:h-[500px]"
-            />
+          <div className="relative flex w-full items-center justify-center lg:w-[58%]">
+            <div className="relative h-[300px] w-full max-w-[520px] md:h-[360px]">
+              <div className="absolute left-[6%] top-[8%] h-10 w-10 rounded-full bg-[#FCD5D5]" />
+              <div className="absolute left-[18%] top-[0%] h-[210px] w-[210px] rounded-full bg-[#F8DADA] opacity-75 md:h-[260px] md:w-[260px]" />
+              <div className="absolute bottom-[24%] left-[8%] h-2.5 w-2.5 rounded-full bg-[#8B7CFF]" />
+              <div className="absolute right-[14%] top-[20%] h-2.5 w-2.5 rounded-full bg-[#8B7CFF]" />
+              <div className="absolute bottom-[32%] right-[10%] h-3 w-3 rounded-full bg-[#FCD5D5]" />
+
+              <img
+                src="/technology1.png"
+                alt="About hero"
+                className="absolute bottom-0 left-1/2 z-10 h-[260px] w-auto -translate-x-1/2 object-contain md:h-[330px]"
+              />
+            </div>
           </div>
         </div>
       </section>
 
       <section className="w-full bg-white">
-        <div className="mx-auto flex w-full max-w-330 flex-col gap-8 px-4 py-12 md:px-6 lg:flex-row lg:items-start lg:justify-between xl:px-8">
-          <div className="flex w-full flex-col gap-4 lg:w-[35%]">
+        <div className="mx-auto flex w-full max-w-330 flex-col gap-6 px-4 py-10 md:px-6 lg:flex-row lg:items-start lg:justify-between xl:px-8">
+          <div className="flex w-full flex-col gap-3 lg:w-[33%]">
             <span className="text-[14px] font-bold text-[#E74040]">
               Problems trying
             </span>
 
-            <h2 className="max-w-[280px] text-[24px] font-bold leading-[32px] text-[#252B42]">
-              Met minim Mollie non desert Alamo est sit cliquey dolor do met sent.
+            <h2 className="max-w-[260px] text-[20px] font-bold leading-[30px] text-[#252B42]">
+              Met minim Mollie non desert Alamo est sit cliquey dolor do met
+              sent.
             </h2>
           </div>
 
-          <div className="w-full lg:w-[55%]">
+          <div className="w-full lg:w-[54%]">
             <p className="text-[14px] leading-[20px] text-[#737373]">
               Problems trying to resolve the conflict between the two major realms
               of Classical physics: Newtonian mechanics. Problems trying to
@@ -81,89 +96,89 @@ function AboutPage() {
       </section>
 
       <section className="w-full bg-white">
-        <div className="mx-auto flex w-full max-w-330 flex-col gap-8 px-4 py-8 text-center md:px-6 md:flex-row md:flex-wrap md:gap-y-10 lg:flex-nowrap lg:justify-between xl:px-8">
-        <div className="flex flex-col items-center gap-2 md:w-1/2 lg:w-[23%]">
-            <h3 className="text-[58px] font-bold leading-[80px] text-[#252B42]">
-            15K
+        <div className="mx-auto flex w-full max-w-330 flex-col gap-6 px-4 py-6 text-center md:flex-row md:flex-wrap md:px-6 lg:flex-nowrap lg:justify-between xl:px-8">
+          <div className="flex flex-col items-center gap-1 md:w-1/2 lg:w-[23%]">
+            <h3 className="text-[40px] font-bold leading-[50px] text-[#252B42]">
+              15K
             </h3>
-            <p className="text-[16px] font-bold text-[#737373]">Happy Customers</p>
-        </div>
+            <p className="text-[14px] font-bold text-[#737373]">Happy Customers</p>
+          </div>
 
-        <div className="flex flex-col items-center gap-2 md:w-1/2 lg:w-[23%]">
-            <h3 className="text-[58px] font-bold leading-[80px] text-[#252B42]">
-            150K
+          <div className="flex flex-col items-center gap-1 md:w-1/2 lg:w-[23%]">
+            <h3 className="text-[40px] font-bold leading-[50px] text-[#252B42]">
+              150K
             </h3>
-            <p className="text-[16px] font-bold text-[#737373]">Monthly Visitors</p>
-        </div>
+            <p className="text-[14px] font-bold text-[#737373]">Monthly Visitors</p>
+          </div>
 
-        <div className="flex flex-col items-center gap-2 md:w-1/2 lg:w-[23%]">
-            <h3 className="text-[58px] font-bold leading-[80px] text-[#252B42]">
-            15
+          <div className="flex flex-col items-center gap-1 md:w-1/2 lg:w-[23%]">
+            <h3 className="text-[40px] font-bold leading-[50px] text-[#252B42]">
+              15
             </h3>
-            <p className="text-[16px] font-bold text-[#737373]">Countries Worldwide</p>
-        </div>
+            <p className="text-[14px] font-bold text-[#737373]">Countries Worldwide</p>
+          </div>
 
-        <div className="flex flex-col items-center gap-2 md:w-1/2 lg:w-[23%]">
-            <h3 className="text-[58px] font-bold leading-[80px] text-[#252B42]">
-            100+
+          <div className="flex flex-col items-center gap-1 md:w-1/2 lg:w-[23%]">
+            <h3 className="text-[40px] font-bold leading-[50px] text-[#252B42]">
+              100+
             </h3>
-            <p className="text-[16px] font-bold text-[#737373]">Top Partners</p>
-        </div>
+            <p className="text-[14px] font-bold text-[#737373]">Top Partners</p>
+          </div>
         </div>
       </section>
 
       <section className="w-full bg-white">
-        <div className="mx-auto flex w-full max-w-330 px-4 py-10 md:px-6 xl:px-8">
-          <div className="relative w-full overflow-hidden rounded-[20px]">
+        <div className="mx-auto flex w-full max-w-330 px-4 py-8 md:px-6 xl:px-8">
+          <div className="relative w-full overflow-hidden rounded-[12px]">
             <img
-              src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1400&q=80"
+              src="/video-cover.jpg"
               alt="video cover"
-              className="h-[300px] w-full object-cover md:h-[500px]"
+              className="h-[240px] w-full object-cover md:h-[340px]"
             />
 
-            <button className="absolute left-1/2 top-1/2 flex h-20 w-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[#23A6F0] text-white shadow-lg">
-              <FaPlay size={22} className="ml-1" />
+            <button className="absolute left-1/2 top-1/2 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[#23A6F0] text-white shadow-lg">
+              <FaPlay size={16} className="ml-0.5" />
             </button>
           </div>
         </div>
       </section>
 
       <section className="w-full bg-white">
-        <div className="mx-auto flex w-full max-w-330 flex-col gap-10 px-4 py-14 md:px-6 xl:px-8">
-          <div className="flex flex-col items-center gap-3 text-center">
-            <h2 className="text-[40px] font-bold leading-[50px] text-[#252B42]">
+        <div className="mx-auto flex w-full max-w-330 flex-col gap-8 px-4 py-12 md:px-6 xl:px-8">
+          <div className="flex flex-col items-center gap-2 text-center">
+            <h2 className="text-[24px] font-bold leading-[32px] text-[#252B42]">
               Meet Our Team
             </h2>
-            <p className="max-w-[450px] text-[14px] leading-[20px] text-[#737373]">
+            <p className="max-w-[420px] text-[12px] leading-[18px] text-[#737373]">
               Problems trying to resolve the conflict between the two major realms
               of Classical physics: Newtonian mechanics
             </p>
           </div>
 
-          <div className="flex flex-col gap-8 md:flex-row md:flex-wrap md:gap-7.5">
+          <div className="flex flex-col gap-6 md:flex-row md:flex-wrap md:gap-6">
             {teamMembers.map((member) => (
               <div
                 key={member.id}
-                className="flex w-full flex-col items-center text-center md:w-[calc(50%-15px)] lg:w-[calc(33.333%-20px)]"
+                className="flex w-full flex-col items-center text-center md:w-[calc(33.333%-16px)]"
               >
                 <img
                   src={member.image}
                   alt={member.name}
-                  className="h-[300px] w-full object-cover md:h-[231px]"
+                  className="h-[180px] w-full object-cover"
                 />
 
-                <div className="flex flex-col items-center gap-3 py-6">
-                  <h3 className="text-[16px] font-bold text-[#252B42]">
+                <div className="flex flex-col items-center gap-2 py-4">
+                  <h3 className="text-[14px] font-bold text-[#252B42]">
                     {member.name}
                   </h3>
-                  <p className="text-[14px] font-semibold text-[#737373]">
+                  <p className="text-[12px] font-semibold text-[#737373]">
                     {member.role}
                   </p>
 
-                  <div className="flex items-center gap-5 text-[#23A6F0]">
-                    <FaFacebookF size={16} />
-                    <FaInstagram size={16} />
-                    <FaTwitter size={16} />
+                  <div className="flex items-center gap-4 text-[#23A6F0]">
+                    <FaFacebookF size={14} />
+                    <FaInstagram size={14} />
+                    <FaTwitter size={14} />
                   </div>
                 </div>
               </div>
@@ -173,51 +188,54 @@ function AboutPage() {
       </section>
 
       <section className="w-full bg-[#FAFAFA]">
-        <div className="mx-auto flex w-full max-w-330 flex-col items-center gap-6 px-4 py-14 text-center md:px-6 xl:px-8">
-          <h2 className="text-[40px] font-bold leading-[50px] text-[#252B42]">
+        <div className="mx-auto flex w-full max-w-330 flex-col items-center gap-4 px-4 py-10 text-center md:px-6 xl:px-8">
+          <h2 className="text-[24px] font-bold leading-[32px] text-[#252B42]">
             Big Companies Are Here
           </h2>
-          <p className="max-w-[500px] text-[14px] leading-[20px] text-[#737373]">
+          <p className="max-w-[420px] text-[12px] leading-[18px] text-[#737373]">
             Problems trying to resolve the conflict between the two major realms
             of Classical physics: Newtonian mechanics
           </p>
 
-          <div className="flex w-full flex-col items-center justify-center gap-10 py-6 md:flex-row md:flex-wrap">
-            <span className="text-[40px] font-bold text-[#737373] opacity-60">hooli</span>
-            <span className="text-[40px] font-bold text-[#737373] opacity-60">lyft</span>
-            <span className="text-[40px] font-bold text-[#737373] opacity-60">stripe</span>
-            <span className="text-[40px] font-bold text-[#737373] opacity-60">aws</span>
-            <span className="text-[40px] font-bold text-[#737373] opacity-60">reddit</span>
+          <div className="flex w-full flex-col items-center justify-center gap-8 py-4 md:flex-row md:flex-wrap md:gap-10">
+            {companyLogos.map((logo) => (
+              <img
+                key={logo.id}
+                src={logo.image}
+                alt={logo.name}
+                className="h-6 w-auto object-contain opacity-60"
+              />
+            ))}
           </div>
         </div>
       </section>
 
       <section className="w-full bg-white">
-        <div className="mx-auto flex w-full max-w-330 flex-col md:flex-row">
-          <div className="flex w-full flex-col justify-center gap-6 bg-[#2A7CC7] px-6 py-12 text-white md:w-1/2 md:px-10">
-            <span className="text-[14px] font-bold tracking-[0.2px]">
+        <div className="mx-auto grid w-full max-w-330 grid-cols-1 md:grid-cols-[0.48fr_0.52fr]">
+          <div className="flex flex-col justify-center gap-4 bg-[#2A7CC7] px-8 py-12 text-white md:px-10">
+            <span className="text-[12px] font-bold tracking-[0.2px]">
               WORK WITH US
             </span>
 
-            <h2 className="max-w-[280px] text-[40px] font-bold leading-[50px]">
+            <h2 className="max-w-[240px] text-[28px] font-bold leading-[36px]">
               Now Let’s grow Yours
             </h2>
 
-            <p className="max-w-[320px] text-[14px] leading-[20px] text-white/90">
+            <p className="max-w-[280px] text-[12px] leading-[18px] text-white/90">
               The gradual accumulation of information about atomic and small-scale
               behavior during the first quarter of the 20th
             </p>
 
-            <button className="w-fit border border-white px-10 py-4 text-[14px] font-bold text-white">
+            <button className="w-fit border border-white px-8 py-3 text-[12px] font-bold text-white">
               Button
             </button>
           </div>
 
-          <div className="w-full md:w-1/2">
+          <div className="w-full">
             <img
-              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=1200&q=80"
+              src="/work-with-us.jpg"
               alt="work with us"
-              className="h-[300px] w-full object-cover md:h-full"
+              className="h-[320px] w-full object-cover md:h-full"
             />
           </div>
         </div>

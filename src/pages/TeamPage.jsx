@@ -4,66 +4,57 @@ function TeamPage() {
   const teamMembers = [
     {
       id: 1,
-      name: 'Gökhan Özdemir',
-      role: 'Project Manager',
-      image:
-        'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&q=80',
+      name: 'Username',
+      role: 'Profession',
+      image: '/th1.jpg',
     },
     {
       id: 2,
-      name: 'Burak Kuyumcu',
-      role: 'Full Stack Developer',
-      image:
-        'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=800&q=80',
+      name: 'Username',
+      role: 'Profession',
+      image: '/th2.jpg',
     },
     {
       id: 3,
-      name: 'Ayşe Yılmaz',
-      role: 'UI/UX Designer',
-      image:
-        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=800&q=80',
+      name: 'Username',
+      role: 'Profession',
+      image: '/th3.jpg',
     },
     {
       id: 4,
-      name: 'Mehmet Kaya',
-      role: 'Frontend Developer',
-      image:
-        'https://images.unsplash.com/photo-1504593811423-6dd665756598?auto=format&fit=crop&w=800&q=80',
+      name: 'Username',
+      role: 'Profession',
+      image: '/th4.jpg',
     },
     {
       id: 5,
-      name: 'Elif Demir',
-      role: 'Backend Developer',
-      image:
-        'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=800&q=80',
+      name: 'Username',
+      role: 'Profession',
+      image: '/th5.jpg',
     },
     {
       id: 6,
-      name: 'Can Arslan',
-      role: 'QA Engineer',
-      image:
-        'https://images.unsplash.com/photo-1507591064344-4c6ce005b128?auto=format&fit=crop&w=800&q=80',
+      name: 'Username',
+      role: 'Profession',
+      image: '/th6.jpg',
     },
     {
       id: 7,
-      name: 'Zeynep Aksoy',
-      role: 'Product Designer',
-      image:
-        'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80',
+      name: 'Username',
+      role: 'Profession',
+      image: '/th7.jpg',
     },
     {
       id: 8,
-      name: 'Mert Şahin',
-      role: 'Mobile Developer',
-      image:
-        'https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?auto=format&fit=crop&w=800&q=80',
+      name: 'Username',
+      role: 'Profession',
+      image: '/th8.jpg',
     },
     {
       id: 9,
-      name: 'Deniz Acar',
-      role: 'Marketing Specialist',
-      image:
-        'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80',
+      name: 'Username',
+      role: 'Profession',
+      image: '/th9.jpg',
     },
   ];
 
@@ -92,7 +83,7 @@ function TeamPage() {
           <div className="flex flex-col gap-4 lg:flex-row">
             <div className="w-full lg:w-1/2">
               <img
-                src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1200&q=80"
+                src="/heroteam5.jpg"
                 alt="Hero team"
                 className="h-[300px] w-full object-cover md:h-[530px]"
               />
@@ -101,12 +92,12 @@ function TeamPage() {
             <div className="flex w-full flex-col gap-4 lg:w-1/2">
               <div className="flex flex-col gap-4 md:flex-row">
                 <img
-                  src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80"
+                  src="/heroteam4.jpg"
                   alt="team 1"
                   className="h-[250px] w-full object-cover md:h-[260px] md:w-1/2"
                 />
                 <img
-                  src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80"
+                  src="/heroteam2.jpg"
                   alt="team 2"
                   className="h-[250px] w-full object-cover md:h-[260px] md:w-1/2"
                 />
@@ -114,12 +105,12 @@ function TeamPage() {
 
               <div className="flex flex-col gap-4 md:flex-row">
                 <img
-                  src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=800&q=80"
+                  src="/heroteam3.jpg"
                   alt="team 3"
                   className="h-[250px] w-full object-cover md:h-[260px] md:w-1/2"
                 />
                 <img
-                  src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&q=80"
+                  src="/heroteam1.jpg"
                   alt="team 4"
                   className="h-[250px] w-full object-cover md:h-[260px] md:w-1/2"
                 />

@@ -5,6 +5,7 @@ import ProductCard from '../components/ProductCard';
 import HomeHeroSlider from '../components/HomeHeroSlider';
 import EditorsPick from '../components/EditorsPick';
 import FeaturedPosts from '../components/FeaturedPosts';
+import VitaSlider from '../components/VitaSlider';
 import { fetchCategoriesIfNeeded } from '../store/actions/productActions';
 
 function HomePage() {
@@ -22,8 +23,7 @@ function HomePage() {
       department: 'English Department',
       oldPrice: '16.48',
       price: '6.48',
-      image:
-        'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80',
+      image: '/Home1.jpg',
     },
     {
       id: 2,
@@ -31,8 +31,7 @@ function HomePage() {
       department: 'English Department',
       oldPrice: '16.48',
       price: '6.48',
-      image:
-        'https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=800&q=80',
+      image: '/Home2.jpg',
     },
     {
       id: 3,
@@ -40,8 +39,7 @@ function HomePage() {
       department: 'English Department',
       oldPrice: '16.48',
       price: '6.48',
-      image:
-        'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=800&q=80',
+      image: '/Home3.jpg',
     },
     {
       id: 4,
@@ -49,8 +47,7 @@ function HomePage() {
       department: 'English Department',
       oldPrice: '16.48',
       price: '6.48',
-      image:
-        'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=800&q=80',
+      image: '/Home4.jpg',
     },
     {
       id: 5,
@@ -58,8 +55,7 @@ function HomePage() {
       department: 'English Department',
       oldPrice: '16.48',
       price: '6.48',
-      image:
-        'https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=800&q=80',
+      image: '/Home5.jpg',
     },
     {
       id: 6,
@@ -67,8 +63,7 @@ function HomePage() {
       department: 'English Department',
       oldPrice: '16.48',
       price: '6.48',
-      image:
-        'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=800&q=80',
+      image: '/Home6.jpg',
     },
     {
       id: 7,
@@ -76,8 +71,7 @@ function HomePage() {
       department: 'English Department',
       oldPrice: '16.48',
       price: '6.48',
-      image:
-        'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=800&q=80',
+      image: '/Home7.jpg',
     },
     {
       id: 8,
@@ -85,8 +79,7 @@ function HomePage() {
       department: 'English Department',
       oldPrice: '16.48',
       price: '6.48',
-      image:
-        'https://images.unsplash.com/photo-1495385794356-15371f348c31?auto=format&fit=crop&w=800&q=80',
+      image: '/Home8.jpg',
     },
   ];
 
@@ -188,55 +181,27 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="w-full bg-[#23856D]">
-        <div className="mx-auto flex w-full max-w-330 flex-col items-center gap-8 px-4 py-12 text-white md:flex-row md:px-6 xl:px-8">
-          <div className="flex w-full flex-col gap-4 md:w-1/2">
-            <span className="text-[16px] font-bold tracking-[0.1px]">
-              SUMMER 2020
-            </span>
-            <h2 className="text-[40px] font-bold leading-[50px]">
-              Vita Classic Product
-            </h2>
-            <p className="max-w-[300px] text-[14px] leading-6 text-white/90">
-              We know how large objects will act, We know how are objects will act,
-              We know
-            </p>
-
-            <div className="flex items-center gap-4">
-              <span className="text-[24px] font-bold">$16.48</span>
-              <button className="bg-[#2DC071] px-8 py-3 text-[14px] font-bold text-white">
-                ADD TO CART
-              </button>
-            </div>
-          </div>
-
-          <div className="flex w-full justify-center md:w-1/2">
-            <img
-              src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80"
-              alt="Vita product"
-              className="h-[300px] w-full object-cover md:h-[400px]"
-            />
-          </div>
-        </div>
-      </section>
+      <VitaSlider />
 
       <section className="w-full bg-white">
         <div className="mx-auto flex w-full max-w-330 flex-col gap-8 px-4 py-12 md:flex-row md:items-center md:px-6 xl:px-8">
-          <div className="w-full md:w-1/2">
+          <div className="flex w-full justify-center md:w-1/2">
             <img
-              src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=900&q=80"
+              src="/neural.png"
               alt="Promo"
-              className="h-[300px] w-full object-cover md:h-[400px]"
+              className="h-[260px] w-full max-w-[510px] object-cover md:h-[320px]"
             />
           </div>
 
-          <div className="flex w-full flex-col gap-4 md:w-1/2">
+          <div className="flex w-full flex-col gap-4 md:w-1/2 md:pl-8">
             <span className="text-[16px] font-bold text-[#BDBDBD]">
               SUMMER 2020
             </span>
+
             <h2 className="max-w-[320px] text-[40px] font-bold leading-[50px] text-[#252B42]">
               Part of the Neural Universe
             </h2>
+
             <p className="max-w-[320px] text-[14px] leading-6 text-[#737373]">
               We know how large objects will act, but things on a small scale.
             </p>

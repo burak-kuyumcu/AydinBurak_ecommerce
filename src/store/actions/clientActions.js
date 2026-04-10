@@ -5,6 +5,42 @@ export const SET_ROLES = 'SET_ROLES';
 export const SET_THEME = 'SET_THEME';
 export const SET_LANGUAGE = 'SET_LANGUAGE';
 export const SET_ADDRESS_LIST = 'SET_ADDRESS_LIST';
+export const SET_CREDIT_CARDS = 'SET_CREDIT_CARDS';
+
+const ADDRESS_STORAGE_KEY = 'mock_addresses';
+const CARD_STORAGE_KEY = 'mock_cards';
+
+const readFromStorage = (key) => {
+  try {
+    return JSON.parse(localStorage.getItem(key)) || [];
+  } catch {
+    return [];
+  }
+};
+
+const writeToStorage = (key, data) => {
+  localStorage.setItem(key, JSON.stringify(data));
+};
+
+const createLocalId = () =>
+  `${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+
+const getAuthConfig = (getState) => {
+  const state = getState?.();
+  const tokenFromState = state?.client?.user?.token;
+  const tokenFromStorage = localStorage.getItem('token');
+  const token = tokenFromState || tokenFromStorage;
+
+  if (!token) {
+    return {};
+  }
+
+  return {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+};
 
 export const setUser = (user) => ({
   type: SET_USER,
@@ -36,6 +72,11 @@ export const setAddressList = (addressList) => ({
   payload: addressList,
 });
 
+export const setCreditCards = (creditCards) => ({
+  type: SET_CREDIT_CARDS,
+  payload: creditCards,
+});
+
 export const fetchRolesIfNeeded = () => {
   return async (dispatch, getState) => {
     const { client } = getState();
@@ -62,20 +103,23 @@ export const loginUser = (formData, history, previousPath) => {
       });
 
       const userData = response.data;
-
       dispatch(setUser(userData));
 
-      if (formData.rememberMe && userData.token) {
-        localStorage.setItem('token', userData.token);
+      if (userData.token) {
         setApiToken(userData.token);
+        localStorage.setItem('token', userData.token);
       } else {
-        localStorage.removeItem('token');
         setApiToken(null);
+        localStorage.removeItem('token');
       }
 
       history.push(previousPath || '/');
       return { success: true };
     } catch (error) {
+      localStorage.removeItem('token');
+      setApiToken(null);
+      dispatch(clearUser());
+
       const message =
         error?.response?.data?.message || 'Login failed. Please try again.';
       return { success: false, message };
@@ -88,24 +132,29 @@ export const verifyStoredToken = () => {
     const storedToken = localStorage.getItem('token');
 
     if (!storedToken) {
-      return;
+      return { success: false };
     }
 
     try {
       setApiToken(storedToken);
 
-      const response = await api.get('/verify');
+      const response = await api.get('/verify', {
+        headers: {
+          Authorization: `Bearer ${storedToken}`,
+        },
+      });
+
       const verifiedUser = response.data;
 
-      dispatch(setUser(verifiedUser));
+      dispatch(
+        setUser({
+          ...verifiedUser,
+          token: verifiedUser.token || storedToken,
+        })
+      );
 
-      if (verifiedUser.token) {
-        localStorage.setItem('token', verifiedUser.token);
-        setApiToken(verifiedUser.token);
-      } else {
-        localStorage.setItem('token', storedToken);
-        setApiToken(storedToken);
-      }
+      localStorage.setItem('token', verifiedUser.token || storedToken);
+      setApiToken(verifiedUser.token || storedToken);
 
       return { success: true };
     } catch (error) {
@@ -127,112 +176,149 @@ export const logoutUser = () => {
 };
 
 export const fetchAddresses = () => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     try {
-      const response = await api.get('/user/address');
+      const response = await api.get('/user/address', getAuthConfig(getState));
       dispatch(setAddressList(response.data));
-      return { success: true };
+      return { success: true, source: 'api' };
     } catch (error) {
-      console.error('Addresses could not be fetched:', error);
-      return { success: false };
+      const localAddresses = readFromStorage(ADDRESS_STORAGE_KEY);
+      dispatch(setAddressList(localAddresses));
+      console.warn('API address fetch failed, local fallback used.');
+      return { success: true, source: 'local' };
     }
   };
 };
 
 export const createAddress = (addressData) => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     try {
-      await api.post('/user/address', addressData);
+      await api.post('/user/address', addressData, getAuthConfig(getState));
       await dispatch(fetchAddresses());
-      return { success: true };
+      return { success: true, source: 'api' };
     } catch (error) {
-      console.error('Address could not be created:', error);
-      return { success: false };
+      const current = readFromStorage(ADDRESS_STORAGE_KEY);
+      const newAddress = {
+        id: createLocalId(),
+        ...addressData,
+      };
+      const updated = [...current, newAddress];
+      writeToStorage(ADDRESS_STORAGE_KEY, updated);
+      dispatch(setAddressList(updated));
+      console.warn('API address create failed, local fallback used.');
+      return { success: true, source: 'local' };
     }
   };
 };
 
 export const updateAddress = (addressData) => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     try {
-      await api.put('/user/address', addressData);
+      await api.put('/user/address', addressData, getAuthConfig(getState));
       await dispatch(fetchAddresses());
-      return { success: true };
+      return { success: true, source: 'api' };
     } catch (error) {
-      console.error('Address could not be updated:', error);
-      return { success: false };
+      const current = readFromStorage(ADDRESS_STORAGE_KEY);
+      const updated = current.map((item) =>
+        String(item.id) === String(addressData.id)
+          ? { ...item, ...addressData }
+          : item
+      );
+      writeToStorage(ADDRESS_STORAGE_KEY, updated);
+      dispatch(setAddressList(updated));
+      console.warn('API address update failed, local fallback used.');
+      return { success: true, source: 'local' };
     }
   };
 };
 
 export const deleteAddress = (addressId) => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     try {
-      await api.delete(`/user/address/${addressId}`);
+      await api.delete(`/user/address/${addressId}`, getAuthConfig(getState));
       await dispatch(fetchAddresses());
-      return { success: true };
+      return { success: true, source: 'api' };
     } catch (error) {
-      console.error('Address could not be deleted:', error);
-      return { success: false };
+      const current = readFromStorage(ADDRESS_STORAGE_KEY);
+      const updated = current.filter(
+        (item) => String(item.id) !== String(addressId)
+      );
+      writeToStorage(ADDRESS_STORAGE_KEY, updated);
+      dispatch(setAddressList(updated));
+      console.warn('API address delete failed, local fallback used.');
+      return { success: true, source: 'local' };
     }
   };
 };
 
-export const SET_CREDIT_CARDS = 'SET_CREDIT_CARDS';
-
-export const setCreditCards = (creditCards) => ({
-  type: SET_CREDIT_CARDS,
-  payload: creditCards,
-});
-
 export const fetchCards = () => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     try {
-      const response = await api.get('/user/card');
+      const response = await api.get('/user/card', getAuthConfig(getState));
       dispatch(setCreditCards(response.data));
-      return { success: true };
+      return { success: true, source: 'api' };
     } catch (error) {
-      console.error('Cards could not be fetched:', error);
-      return { success: false };
+      const localCards = readFromStorage(CARD_STORAGE_KEY);
+      dispatch(setCreditCards(localCards));
+      console.warn('API card fetch failed, local fallback used.');
+      return { success: true, source: 'local' };
     }
   };
 };
 
 export const createCard = (cardData) => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     try {
-      await api.post('/user/card', cardData);
+      await api.post('/user/card', cardData, getAuthConfig(getState));
       await dispatch(fetchCards());
-      return { success: true };
+      return { success: true, source: 'api' };
     } catch (error) {
-      console.error('Card could not be created:', error);
-      return { success: false };
+      const current = readFromStorage(CARD_STORAGE_KEY);
+      const newCard = {
+        id: createLocalId(),
+        ...cardData,
+      };
+      const updated = [...current, newCard];
+      writeToStorage(CARD_STORAGE_KEY, updated);
+      dispatch(setCreditCards(updated));
+      console.warn('API card create failed, local fallback used.');
+      return { success: true, source: 'local' };
     }
   };
 };
 
 export const updateCard = (cardData) => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     try {
-      await api.put('/user/card', cardData);
+      await api.put('/user/card', cardData, getAuthConfig(getState));
       await dispatch(fetchCards());
-      return { success: true };
+      return { success: true, source: 'api' };
     } catch (error) {
-      console.error('Card could not be updated:', error);
-      return { success: false };
+      const current = readFromStorage(CARD_STORAGE_KEY);
+      const updated = current.map((item) =>
+        String(item.id) === String(cardData.id) ? { ...item, ...cardData } : item
+      );
+      writeToStorage(CARD_STORAGE_KEY, updated);
+      dispatch(setCreditCards(updated));
+      console.warn('API card update failed, local fallback used.');
+      return { success: true, source: 'local' };
     }
   };
 };
 
 export const deleteCard = (cardId) => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     try {
-      await api.delete(`/user/card/${cardId}`);
+      await api.delete(`/user/card/${cardId}`, getAuthConfig(getState));
       await dispatch(fetchCards());
-      return { success: true };
+      return { success: true, source: 'api' };
     } catch (error) {
-      console.error('Card could not be deleted:', error);
-      return { success: false };
+      const current = readFromStorage(CARD_STORAGE_KEY);
+      const updated = current.filter((item) => String(item.id) !== String(cardId));
+      writeToStorage(CARD_STORAGE_KEY, updated);
+      dispatch(setCreditCards(updated));
+      console.warn('API card delete failed, local fallback used.');
+      return { success: true, source: 'local' };
     }
   };
 };

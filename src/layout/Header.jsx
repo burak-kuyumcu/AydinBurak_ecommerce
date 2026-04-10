@@ -194,7 +194,7 @@ function Header() {
               </Link>
 
               <Link
-                to="/"
+                to="/team"
                 onClick={closeMobileMenu}
                 className="text-[30px] leading-11.25 text-[#737373]"
               >
@@ -347,7 +347,7 @@ function Header() {
               </Link>
 
               <Link
-                to="/"
+                to="/team"
                 className="text-[14px] font-semibold leading-6 tracking-[0.2px] text-[#737373]"
               >
                 Pages

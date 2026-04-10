@@ -9,9 +9,7 @@ function HomeHeroSlider() {
       title: 'NEW COLLECTION',
       description:
         'We know how large objects will act, but things on a small screen.',
-      image:
-        'https://images.unsplash.com/photo-1506152983158-b4a74a01c721?auto=format&fit=crop&w=900&q=80',
-      bg: 'bg-[#23A6F0]',
+      image: '/HeroSlider.jpg',
     },
     {
       id: 2,
@@ -21,7 +19,6 @@ function HomeHeroSlider() {
         'A modern collection designed for mobile-first shopping experiences.',
       image:
         'https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=900&q=80',
-      bg: 'bg-[#2DC071]',
     },
   ];
 
@@ -35,7 +32,7 @@ function HomeHeroSlider() {
       >
         {slides.map((slide) => (
           <SwiperSlide key={slide.id}>
-            <div className={`w-full ${slide.bg}`}>
+            <div className="w-full bg-[#23A6F0]">
               <div className="mx-auto flex w-full max-w-330 flex-col md:min-h-[500px] md:flex-row">
                 <div className="flex w-full flex-col justify-center gap-6 px-6 py-12 text-white md:w-1/2 md:px-8 lg:px-10">
                   <span className="text-[16px] font-bold tracking-[0.1px]">
@@ -55,11 +52,11 @@ function HomeHeroSlider() {
                   </button>
                 </div>
 
-                <div className="w-full md:w-1/2">
+                <div className="flex w-full items-end justify-center md:w-1/2">
                   <img
                     src={slide.image}
                     alt={slide.title}
-                    className="h-[320px] w-full object-cover md:h-full"
+                    className="h-[320px] w-full object-contain md:h-[500px]"
                   />
                 </div>
               </div>

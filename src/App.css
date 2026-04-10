@@ -136,6 +136,26 @@
     }
   }
 
+  .vita-swiper .swiper-button-prev,
+.vita-swiper .swiper-button-next {
+  color: #ffffff;
+}
+
+.vita-swiper .swiper-button-prev::after,
+.vita-swiper .swiper-button-next::after {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.vita-swiper .swiper-pagination-bullet {
+  background: #ffffff;
+  opacity: 0.5;
+}
+
+.vita-swiper .swiper-pagination-bullet-active {
+  opacity: 1;
+}
+
   @media (max-width: 1024px) {
     margin-top: 20px;
     flex-wrap: wrap;

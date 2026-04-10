@@ -3,19 +3,19 @@ function FeaturedPosts() {
     {
       id: 1,
       image:
-        'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=800&q=80',
+        '/Featured1.jpg',
       title: 'Loudest à la Madison #1',
     },
     {
       id: 2,
       image:
-        'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80',
+        '/Featured2.jpg',
       title: 'Loudest à la Madison #2',
     },
     {
       id: 3,
       image:
-        'https://images.unsplash.com/photo-1493246507139-91e8fad9978e?auto=format&fit=crop&w=800&q=80',
+        '/Featured3.jpg',
       title: 'Loudest à la Madison #3',
     },
   ];
