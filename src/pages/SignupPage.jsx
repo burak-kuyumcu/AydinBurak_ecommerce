@@ -3,10 +3,21 @@ import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
 import api from '../services/api';
 
+const DEFAULT_ROLES = [
+  {
+    id: 1,
+    name: 'customer',
+  },
+  {
+    id: 2,
+    name: 'store',
+  },
+];
+
 function SignupPage() {
   const history = useHistory();
-  const [roles, setRoles] = useState([]);
-  const [rolesLoading, setRolesLoading] = useState(true);
+  const [roles, setRoles] = useState(DEFAULT_ROLES);
+  const [rolesLoading, setRolesLoading] = useState(false);
   const [apiError, setApiError] = useState('');
   const [submitLoading, setSubmitLoading] = useState(false);
 
@@ -23,7 +34,7 @@ function SignupPage() {
       email: '',
       password: '',
       passwordConfirm: '',
-      role_id: '',
+      role_id: '1',
       store_name: '',
       store_phone: '',
       store_tax_id: '',
@@ -49,12 +60,23 @@ function SignupPage() {
   }, [selectedRole]);
 
   useEffect(() => {
+    let isMounted = true;
+
     async function fetchRoles() {
       try {
-        setRolesLoading(true);
+        const response = await api.get('/roles', {
+          headers: {
+            Authorization: '',
+          },
+        });
 
-        const response = await api.get('/roles');
-        const roleList = response.data;
+        const roleList = Array.isArray(response.data)
+          ? response.data
+          : [];
+
+        if (!isMounted || roleList.length === 0) {
+          return;
+        }
 
         setRoles(roleList);
 
@@ -65,17 +87,32 @@ function SignupPage() {
         if (customerRole) {
           setValue('role_id', String(customerRole.id), {
             shouldValidate: true,
-            shouldDirty: true,
           });
         }
       } catch (error) {
-        setApiError('Roles could not be loaded.');
+        console.warn(
+          'Roles API could not be loaded. Default roles are being used.',
+          error
+        );
+
+        if (isMounted) {
+          setRoles(DEFAULT_ROLES);
+          setValue('role_id', '1', {
+            shouldValidate: true,
+          });
+        }
       } finally {
-        setRolesLoading(false);
+        if (isMounted) {
+          setRolesLoading(false);
+        }
       }
     }
 
     fetchRoles();
+
+    return () => {
+      isMounted = false;
+    };
   }, [setValue]);
 
   const validatePassword = (value) => {
@@ -150,7 +187,11 @@ function SignupPage() {
     try {
       setSubmitLoading(true);
 
-      await api.post('/signup', payload);
+      await api.post('/signup', payload, {
+        headers: {
+          Authorization: '',
+        },
+      });
 
       alert(
         'Account created successfully. You can log in now.'
