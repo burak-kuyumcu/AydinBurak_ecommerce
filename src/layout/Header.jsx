@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import md5 from 'md5';
 import {
@@ -20,11 +20,14 @@ import {
   FaTwitter,
 } from 'react-icons/fa';
 import { fetchCategoriesIfNeeded } from '../store/actions/productActions';
+import { logoutUser } from '../store/actions/clientActions';
 
 function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const dispatch = useDispatch();
+  const history = useHistory();
+
   const user = useSelector((state) => state.client.user);
   const categories = useSelector((state) => state.product.categories);
   const cart = useSelector((state) => state.shoppingCart.cart);
@@ -39,6 +42,12 @@ function Header() {
 
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
+  };
+
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    closeMobileMenu();
+    history.push('/login');
   };
 
   const gravatarUrl = user?.email
@@ -228,6 +237,14 @@ function Header() {
                 >
                   My Orders
                 </Link>
+
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="text-[18px] font-semibold text-[#E74040]"
+                >
+                  Logout
+                </button>
               </div>
             ) : (
               <div className="flex flex-col items-center gap-3 text-[#23A6F0]">
@@ -387,6 +404,14 @@ function Header() {
                   >
                     My Orders
                   </Link>
+
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="mt-1 block w-full rounded px-3 py-2 text-left text-[14px] font-semibold text-[#E74040] hover:bg-[#FFF1F1]"
+                  >
+                    Logout
+                  </button>
                 </div>
               </div>
             ) : (

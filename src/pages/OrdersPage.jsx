@@ -5,8 +5,11 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 
 function OrdersPage() {
   const dispatch = useDispatch();
+
   const orders = useSelector((state) => state.order.orders);
-  const fetchState = useSelector((state) => state.order.fetchState);
+  const fetchState = useSelector(
+    (state) => state.order.fetchState
+  );
 
   const [openOrderId, setOpenOrderId] = useState(null);
 
@@ -15,7 +18,46 @@ function OrdersPage() {
   }, [dispatch]);
 
   const toggleOrder = (orderId) => {
-    setOpenOrderId((prev) => (prev === orderId ? null : orderId));
+    setOpenOrderId((previousOrderId) =>
+      previousOrderId === orderId ? null : orderId
+    );
+  };
+
+  const formatOrderDate = (dateValue) => {
+    if (!dateValue) {
+      return '-';
+    }
+
+    const date = new Date(dateValue);
+
+    if (Number.isNaN(date.getTime())) {
+      return dateValue;
+    }
+
+    return date.toLocaleString('tr-TR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  };
+
+  const formatPrice = (priceValue) => {
+    const numericPrice = Number(priceValue || 0);
+
+    return `$${numericPrice.toFixed(2)}`;
+  };
+
+  const getLineTotal = (product) => {
+    if (product.line_total !== undefined) {
+      return Number(product.line_total || 0);
+    }
+
+    return (
+      Number(product.unit_price || 0) *
+      Number(product.count || 0)
+    );
   };
 
   if (fetchState === 'FETCHING') {
@@ -26,6 +68,32 @@ function OrdersPage() {
     );
   }
 
+  if (fetchState === 'FAILED') {
+    return (
+      <section className="w-full bg-[#FAFAFA]">
+        <div className="mx-auto flex min-h-[500px] w-full max-w-330 items-center justify-center px-4">
+          <div className="rounded-[10px] bg-white p-8 text-center shadow-sm">
+            <h2 className="text-[24px] font-bold text-[#252B42]">
+              Orders could not be loaded
+            </h2>
+
+            <p className="mt-2 text-[14px] text-[#737373]">
+              Please check the backend connection and try again.
+            </p>
+
+            <button
+              type="button"
+              onClick={() => dispatch(fetchOrders())}
+              className="mt-5 rounded-[8px] bg-[#23A6F0] px-5 py-3 text-[14px] font-semibold text-white"
+            >
+              Try Again
+            </button>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="w-full bg-[#FAFAFA]">
       <div className="mx-auto flex w-full max-w-330 flex-col gap-6 px-4 py-10 md:px-6 xl:px-8">
@@ -33,6 +101,7 @@ function OrdersPage() {
           <h1 className="text-[32px] font-bold text-[#252B42]">
             Previous Orders
           </h1>
+
           <p className="text-[14px] text-[#737373]">
             Review your past orders and order details
           </p>
@@ -45,10 +114,21 @@ function OrdersPage() {
         ) : (
           <div className="overflow-hidden rounded-[10px] bg-white shadow-sm">
             <div className="hidden grid-cols-[1.2fr_1fr_1fr_120px] gap-4 border-b border-[#E6E6E6] bg-[#F8F8F8] px-6 py-4 md:grid">
-              <span className="text-[14px] font-bold text-[#252B42]">Order Date</span>
-              <span className="text-[14px] font-bold text-[#252B42]">Card Name</span>
-              <span className="text-[14px] font-bold text-[#252B42]">Total Price</span>
-              <span className="text-[14px] font-bold text-[#252B42]">Details</span>
+              <span className="text-[14px] font-bold text-[#252B42]">
+                Order Date
+              </span>
+
+              <span className="text-[14px] font-bold text-[#252B42]">
+                Card Name
+              </span>
+
+              <span className="text-[14px] font-bold text-[#252B42]">
+                Total Price
+              </span>
+
+              <span className="text-[14px] font-bold text-[#252B42]">
+                Details
+              </span>
             </div>
 
             <div className="flex flex-col">
@@ -62,8 +142,9 @@ function OrdersPage() {
                       <span className="text-[12px] text-[#737373] md:hidden">
                         Order Date
                       </span>
+
                       <span className="text-[14px] text-[#252B42]">
-                        {orderItem.order_date}
+                        {formatOrderDate(orderItem.order_date)}
                       </span>
                     </div>
 
@@ -71,6 +152,7 @@ function OrdersPage() {
                       <span className="text-[12px] text-[#737373] md:hidden">
                         Card Name
                       </span>
+
                       <span className="text-[14px] text-[#252B42]">
                         {orderItem.card_name}
                       </span>
@@ -80,8 +162,9 @@ function OrdersPage() {
                       <span className="text-[12px] text-[#737373] md:hidden">
                         Total Price
                       </span>
+
                       <span className="text-[14px] font-bold text-[#23856D]">
-                        ${Number(orderItem.price || 0).toFixed(2)}
+                        {formatPrice(orderItem.price)}
                       </span>
                     </div>
 
@@ -107,40 +190,58 @@ function OrdersPage() {
                   {openOrderId === orderItem.id && (
                     <div className="bg-[#FAFAFA] px-4 py-4 md:px-6">
                       <div className="overflow-x-auto rounded-[8px] border border-[#E6E6E6] bg-white">
-                        <div className="grid min-w-[600px] grid-cols-[100px_1fr_100px_1fr] gap-4 border-b border-[#E6E6E6] px-4 py-3">
+                        <div className="grid min-w-[700px] grid-cols-[100px_1fr_100px_140px_140px] gap-4 border-b border-[#E6E6E6] bg-[#F8F8F8] px-4 py-3">
                           <span className="text-[13px] font-bold text-[#252B42]">
                             Product ID
                           </span>
+
                           <span className="text-[13px] font-bold text-[#252B42]">
                             Detail
                           </span>
+
                           <span className="text-[13px] font-bold text-[#252B42]">
                             Count
                           </span>
+
+                          <span className="text-[13px] font-bold text-[#252B42]">
+                            Unit Price
+                          </span>
+
                           <span className="text-[13px] font-bold text-[#252B42]">
                             Line Total
                           </span>
                         </div>
 
-                        {(orderItem.products || []).map((product) => (
-                          <div
-                            key={`${orderItem.id}-${product.product_id}`}
-                            className="grid min-w-[600px] grid-cols-[100px_1fr_100px_1fr] gap-4 border-b border-[#F1F1F1] px-4 py-3 last:border-b-0"
-                          >
-                            <span className="text-[13px] text-[#252B42]">
-                              {product.product_id}
-                            </span>
-                            <span className="text-[13px] text-[#737373]">
-                              {product.detail}
-                            </span>
-                            <span className="text-[13px] text-[#252B42]">
-                              {product.count}
-                            </span>
-                            <span className="text-[13px] font-semibold text-[#23856D]">
-                              -
-                            </span>
-                          </div>
-                        ))}
+                        {(orderItem.products || []).map(
+                          (product, index) => (
+                            <div
+                              key={`${orderItem.id}-${product.product_id}-${index}`}
+                              className="grid min-w-[700px] grid-cols-[100px_1fr_100px_140px_140px] gap-4 border-b border-[#F1F1F1] px-4 py-3 last:border-b-0"
+                            >
+                              <span className="text-[13px] text-[#252B42]">
+                                {product.product_id}
+                              </span>
+
+                              <span className="text-[13px] text-[#737373]">
+                                {product.detail}
+                              </span>
+
+                              <span className="text-[13px] text-[#252B42]">
+                                {product.count}
+                              </span>
+
+                              <span className="text-[13px] text-[#252B42]">
+                                {formatPrice(product.unit_price)}
+                              </span>
+
+                              <span className="text-[13px] font-semibold text-[#23856D]">
+                                {formatPrice(
+                                  getLineTotal(product)
+                                )}
+                              </span>
+                            </div>
+                          )
+                        )}
                       </div>
                     </div>
                   )}

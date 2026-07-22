@@ -4,11 +4,23 @@ export const SET_CART = 'SET_CART';
 export const SET_PAYMENT = 'SET_PAYMENT';
 export const SET_ADDRESS = 'SET_ADDRESS';
 
-export const setCart = (cart) => ({
-  type: SET_CART,
-  payload: cart,
-});
+const CART_STORAGE_KEY = 'shopping_cart';
 
+export const setCart = (cart) => {
+  try {
+    localStorage.setItem(
+      CART_STORAGE_KEY,
+      JSON.stringify(cart)
+    );
+  } catch (error) {
+    console.error('Cart could not be saved:', error);
+  }
+
+  return {
+    type: SET_CART,
+    payload: cart,
+  };
+};
 export const setPayment = (payment) => ({
   type: SET_PAYMENT,
   payload: payment,
