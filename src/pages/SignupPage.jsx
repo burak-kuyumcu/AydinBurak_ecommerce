@@ -35,11 +35,16 @@ function SignupPage() {
   const passwordValue = watch('password');
 
   const selectedRole = useMemo(() => {
-    return roles.find((role) => String(role.id) === String(selectedRoleId));
+    return roles.find(
+      (role) => String(role.id) === String(selectedRoleId)
+    );
   }, [roles, selectedRoleId]);
 
   const isStoreSelected = useMemo(() => {
-    if (!selectedRole) return false;
+    if (!selectedRole) {
+      return false;
+    }
+
     return selectedRole.name?.toLowerCase() === 'store';
   }, [selectedRole]);
 
@@ -47,6 +52,7 @@ function SignupPage() {
     async function fetchRoles() {
       try {
         setRolesLoading(true);
+
         const response = await api.get('/roles');
         const roleList = response.data;
 
@@ -91,17 +97,30 @@ function SignupPage() {
 
   const validateTurkeyPhone = (value) => {
     const phoneRegex = /^(\+90|0)?[5][0-9]{9}$/;
-    return phoneRegex.test(value) || 'Please enter a valid Türkiye phone number.';
+
+    return (
+      phoneRegex.test(value) ||
+      'Please enter a valid Türkiye phone number.'
+    );
   };
 
   const validateTaxId = (value) => {
     const taxRegex = /^T\d{4}V\d{6}$/;
-    return taxRegex.test(value) || 'Tax ID must match pattern TXXXXVXXXXXX.';
+
+    return (
+      taxRegex.test(value) ||
+      'Tax ID must match pattern TXXXXVXXXXXX.'
+    );
   };
 
   const validateIban = (value) => {
     const ibanRegex = /^TR\d{24}$/i;
-    return ibanRegex.test(value.replace(/\s+/g, '')) || 'Please enter a valid IBAN.';
+    const normalizedValue = value.replace(/\s+/g, '');
+
+    return (
+      ibanRegex.test(normalizedValue) ||
+      'Please enter a valid IBAN.'
+    );
   };
 
   const onSubmit = async (formValues) => {
@@ -117,7 +136,8 @@ function SignupPage() {
             name: formValues.store_name,
             phone: formValues.store_phone,
             tax_no: formValues.store_tax_id,
-            bank_account: formValues.store_bank_account.replace(/\s+/g, ''),
+            bank_account:
+              formValues.store_bank_account.replace(/\s+/g, ''),
           },
         }
       : {
@@ -129,14 +149,19 @@ function SignupPage() {
 
     try {
       setSubmitLoading(true);
+
       await api.post('/signup', payload);
 
-      history.goBack();
-      alert('You need to click link in email to activate your account!');
+      alert(
+        'Account created successfully. You can log in now.'
+      );
+
+      history.push('/login');
     } catch (error) {
       const message =
         error?.response?.data?.message ||
         'Signup failed. Please check your information.';
+
       setApiError(message);
     } finally {
       setSubmitLoading(false);
@@ -150,20 +175,28 @@ function SignupPage() {
           <span className="text-[14px] font-bold tracking-[0.2px] text-[#23A6F0]">
             CREATE ACCOUNT
           </span>
+
           <h1 className="text-[40px] font-bold leading-[50px] text-[#252B42]">
             Sign Up
           </h1>
+
           <p className="max-w-[520px] text-[14px] leading-5 text-[#737373]">
-            Create your account to continue shopping. Customer is selected by default. If you choose store, extra store information will be required.
+            Create your account to continue shopping.
+            Customer is selected by default. If you choose
+            store, extra store information will be required.
           </p>
         </div>
 
         <div className="mx-auto w-full max-w-[600px] rounded-[10px] bg-white p-6 shadow-sm md:p-8">
-          <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col gap-5"
+          >
             <div className="flex flex-col gap-2">
               <label className="text-[14px] font-semibold text-[#252B42]">
                 Name
               </label>
+
               <input
                 type="text"
                 className="h-12 border border-[#E6E6E6] px-4 outline-none"
@@ -172,10 +205,12 @@ function SignupPage() {
                   required: 'Name is required.',
                   minLength: {
                     value: 3,
-                    message: 'Name must be at least 3 characters.',
+                    message:
+                      'Name must be at least 3 characters.',
                   },
                 })}
               />
+
               {errors.name && (
                 <span className="text-[12px] text-[#E74040]">
                   {errors.name.message}
@@ -187,6 +222,7 @@ function SignupPage() {
               <label className="text-[14px] font-semibold text-[#252B42]">
                 Email
               </label>
+
               <input
                 type="email"
                 className="h-12 border border-[#E6E6E6] px-4 outline-none"
@@ -195,10 +231,12 @@ function SignupPage() {
                   required: 'Email is required.',
                   pattern: {
                     value: /^\S+@\S+\.\S+$/,
-                    message: 'Please enter a valid email address.',
+                    message:
+                      'Please enter a valid email address.',
                   },
                 })}
               />
+
               {errors.email && (
                 <span className="text-[12px] text-[#E74040]">
                   {errors.email.message}
@@ -210,6 +248,7 @@ function SignupPage() {
               <label className="text-[14px] font-semibold text-[#252B42]">
                 Password
               </label>
+
               <input
                 type="password"
                 className="h-12 border border-[#E6E6E6] px-4 outline-none"
@@ -219,6 +258,7 @@ function SignupPage() {
                   validate: validatePassword,
                 })}
               />
+
               {errors.password && (
                 <span className="text-[12px] text-[#E74040]">
                   {errors.password.message}
@@ -230,16 +270,20 @@ function SignupPage() {
               <label className="text-[14px] font-semibold text-[#252B42]">
                 Confirm Password
               </label>
+
               <input
                 type="password"
                 className="h-12 border border-[#E6E6E6] px-4 outline-none"
                 placeholder="Confirm your password"
                 {...register('passwordConfirm', {
-                  required: 'Password confirmation is required.',
+                  required:
+                    'Password confirmation is required.',
                   validate: (value) =>
-                    value === passwordValue || 'Passwords do not match.',
+                    value === passwordValue ||
+                    'Passwords do not match.',
                 })}
               />
+
               {errors.passwordConfirm && (
                 <span className="text-[12px] text-[#E74040]">
                   {errors.passwordConfirm.message}
@@ -251,6 +295,7 @@ function SignupPage() {
               <label className="text-[14px] font-semibold text-[#252B42]">
                 Role
               </label>
+
               <select
                 className="h-12 border border-[#E6E6E6] px-4 outline-none"
                 {...register('role_id', {
@@ -264,6 +309,7 @@ function SignupPage() {
                   </option>
                 ))}
               </select>
+
               {errors.role_id && (
                 <span className="text-[12px] text-[#E74040]">
                   {errors.role_id.message}
@@ -281,6 +327,7 @@ function SignupPage() {
                   <label className="text-[14px] font-semibold text-[#252B42]">
                     Store Name
                   </label>
+
                   <input
                     type="text"
                     className="h-12 border border-[#E6E6E6] px-4 outline-none"
@@ -291,10 +338,12 @@ function SignupPage() {
                         : false,
                       minLength: {
                         value: 3,
-                        message: 'Store name must be at least 3 characters.',
+                        message:
+                          'Store name must be at least 3 characters.',
                       },
                     })}
                   />
+
                   {errors.store_name && (
                     <span className="text-[12px] text-[#E74040]">
                       {errors.store_name.message}
@@ -306,6 +355,7 @@ function SignupPage() {
                   <label className="text-[14px] font-semibold text-[#252B42]">
                     Store Phone
                   </label>
+
                   <input
                     type="text"
                     className="h-12 border border-[#E6E6E6] px-4 outline-none"
@@ -317,6 +367,7 @@ function SignupPage() {
                       validate: validateTurkeyPhone,
                     })}
                   />
+
                   {errors.store_phone && (
                     <span className="text-[12px] text-[#E74040]">
                       {errors.store_phone.message}
@@ -328,6 +379,7 @@ function SignupPage() {
                   <label className="text-[14px] font-semibold text-[#252B42]">
                     Store Tax ID
                   </label>
+
                   <input
                     type="text"
                     className="h-12 border border-[#E6E6E6] px-4 outline-none"
@@ -339,6 +391,7 @@ function SignupPage() {
                       validate: validateTaxId,
                     })}
                   />
+
                   {errors.store_tax_id && (
                     <span className="text-[12px] text-[#E74040]">
                       {errors.store_tax_id.message}
@@ -350,6 +403,7 @@ function SignupPage() {
                   <label className="text-[14px] font-semibold text-[#252B42]">
                     Store Bank Account
                   </label>
+
                   <input
                     type="text"
                     className="h-12 border border-[#E6E6E6] px-4 outline-none"
@@ -361,6 +415,7 @@ function SignupPage() {
                       validate: validateIban,
                     })}
                   />
+
                   {errors.store_bank_account && (
                     <span className="text-[12px] text-[#E74040]">
                       {errors.store_bank_account.message}
@@ -378,10 +433,16 @@ function SignupPage() {
 
             <button
               type="submit"
-              disabled={!isValid || submitLoading || rolesLoading}
+              disabled={
+                !isValid ||
+                submitLoading ||
+                rolesLoading
+              }
               className="flex h-12 items-center justify-center bg-[#23A6F0] px-6 text-[14px] font-bold text-white disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {submitLoading ? 'Submitting...' : 'Create Account'}
+              {submitLoading
+                ? 'Submitting...'
+                : 'Create Account'}
             </button>
           </form>
         </div>
