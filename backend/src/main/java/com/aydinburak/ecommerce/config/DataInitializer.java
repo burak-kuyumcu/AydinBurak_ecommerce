@@ -8,8 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.List;
+import org.springframework.core.annotation.Order;
 
 @Configuration
 @RequiredArgsConstructor
@@ -19,81 +18,101 @@ public class DataInitializer {
     private final CategoryRepository categoryRepository;
 
     @Bean
+    @Order(1)
     public CommandLineRunner initializeData() {
         return args -> {
-
             initializeRoles();
             initializeCategories();
         };
     }
 
     private void initializeRoles() {
+        ensureRole("customer");
+        ensureRole("store");
+    }
 
-        if (roleRepository.count() == 0) {
-            roleRepository.saveAll(
-                    List.of(
-                            new Role(null, "customer"),
-                            new Role(null, "store")
-                    )
+    private void ensureRole(String roleName) {
+        boolean roleExists = roleRepository
+                .findAll()
+                .stream()
+                .anyMatch(role ->
+                        role.getName().equalsIgnoreCase(roleName)
+                );
+
+        if (!roleExists) {
+            roleRepository.save(
+                    new Role(null, roleName)
             );
         }
     }
 
     private void initializeCategories() {
+        ensureCategory(
+                "k:elbise",
+                "Kadın Elbise",
+                "/Home3.jpg",
+                4.8,
+                "k"
+        );
 
-        if (categoryRepository.count() == 0) {
-            categoryRepository.saveAll(
-                    List.of(
-                            new Category(
-                                    null,
-                                    "k:elbise",
-                                    "Kadın Elbise",
-                                    "https://placehold.co/600x400?text=Kadin+Elbise",
-                                    4.8,
-                                    "k"
-                            ),
-                            new Category(
-                                    null,
-                                    "k:ayakkabi",
-                                    "Kadın Ayakkabı",
-                                    "https://placehold.co/600x400?text=Kadin+Ayakkabi",
-                                    4.7,
-                                    "k"
-                            ),
-                            new Category(
-                                    null,
-                                    "k:canta",
-                                    "Kadın Çanta",
-                                    "https://placehold.co/600x400?text=Kadin+Canta",
-                                    4.6,
-                                    "k"
-                            ),
-                            new Category(
-                                    null,
-                                    "e:gomlek",
-                                    "Erkek Gömlek",
-                                    "https://placehold.co/600x400?text=Erkek+Gomlek",
-                                    4.8,
-                                    "e"
-                            ),
-                            new Category(
-                                    null,
-                                    "e:pantolon",
-                                    "Erkek Pantolon",
-                                    "https://placehold.co/600x400?text=Erkek+Pantolon",
-                                    4.7,
-                                    "e"
-                            ),
-                            new Category(
-                                    null,
-                                    "e:ayakkabi",
-                                    "Erkek Ayakkabı",
-                                    "https://placehold.co/600x400?text=Erkek+Ayakkabi",
-                                    4.6,
-                                    "e"
-                            )
-                    )
-            );
-        }
+        ensureCategory(
+                "k:ayakkabi",
+                "Kadın Ayakkabı",
+                "/Home5.jpg",
+                4.7,
+                "k"
+        );
+
+        ensureCategory(
+                "k:canta",
+                "Kadın Çanta",
+                "/Home4.jpg",
+                4.6,
+                "k"
+        );
+
+        ensureCategory(
+                "e:gomlek",
+                "Erkek Gömlek",
+                "/Home2.jpg",
+                4.8,
+                "e"
+        );
+
+        ensureCategory(
+                "e:pantolon",
+                "Erkek Pantolon",
+                "/Home7.jpg",
+                4.7,
+                "e"
+        );
+
+        ensureCategory(
+                "e:ayakkabi",
+                "Erkek Ayakkabı",
+                "/Home6.jpg",
+                4.6,
+                "e"
+        );
+    }
+
+    private void ensureCategory(
+            String code,
+            String title,
+            String image,
+            Double rating,
+            String gender
+    ) {
+        Category category = categoryRepository
+                .findByCodeIgnoreCase(code)
+                .orElseGet(Category::new);
+
+        category.setCode(code);
+        category.setTitle(title);
+        category.setImg(image);
+        category.setRating(rating);
+        category.setGender(gender);
+
+        categoryRepository.save(category);
     }
 }
