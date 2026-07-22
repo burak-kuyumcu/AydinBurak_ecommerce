@@ -1,6 +1,7 @@
 package com.aydinburak.ecommerce.config;
 
 import com.aydinburak.ecommerce.security.JwtAuthenticationFilter;
+import jakarta.servlet.DispatcherType;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -99,7 +100,15 @@ public class SecurityConfig {
                 )
 
                 .authorizeHttpRequests(auth -> auth
+
+                        // Controller veya validation hatalarının /error
+                        // yönlendirmesinde tekrar 401 olmasını engeller.
+                        .dispatcherTypeMatchers(
+                                DispatcherType.ERROR
+                        ).permitAll()
+
                         .requestMatchers(
+                                "/error",
                                 "/api/health",
                                 "/api/roles",
                                 "/api/categories",
@@ -107,6 +116,7 @@ public class SecurityConfig {
                                 "/api/signup",
                                 "/api/login"
                         ).permitAll()
+
                         .anyRequest().authenticated()
                 )
 
